@@ -54,8 +54,10 @@ class User(AbstractUser):
     )
     image = models.ImageField(
         verbose_name="аватар",
+        upload_to='media/users/',
 
     )
+
 
     def __str__(self):
         return f"{self.pk} | {self.username} | is_seller: {self.is_seller}"
