@@ -13,6 +13,8 @@ class User(AbstractUser):
     tg_id = models.CharField(
         max_length=20,
         verbose_name='ID телеграма',
+        null=True,
+        blank=True,
 
     )
     phone = models.CharField(
@@ -32,14 +34,7 @@ class User(AbstractUser):
         blank=True,
 
     )
-    store = models.ForeignKey(
-        Store,
-        verbose_name='магазин',
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
 
-    )
     filter = models.ForeignKey(
         Filter,
         verbose_name='фильтр уведомлений',
@@ -54,10 +49,12 @@ class User(AbstractUser):
     )
     image = models.ImageField(
         verbose_name="аватар",
-        upload_to='media/users/',
+        upload_to='media/users/avatars/',
 
     )
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["phone"]
 
     def __str__(self):
         return f"{self.pk} | {self.username} | is_seller: {self.is_seller}"

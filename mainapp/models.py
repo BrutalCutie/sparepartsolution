@@ -1,14 +1,12 @@
 from django.db import models
 
-from users.models import User
-
 
 class Message(models.Model):
     chat = models.ForeignKey(
         'Chat',
         verbose_name="чат к которому привязано сообщение",
         on_delete=models.CASCADE,
-
+        related_name='chat'
     )
     message_text = models.TextField(
         verbose_name='текст сообщения',
@@ -20,15 +18,17 @@ class Message(models.Model):
 
     )
     from_user = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.CASCADE,
-        verbose_name="от"
+        verbose_name="от",
+        related_name='messages_from'
 
     )
     to_user = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.CASCADE,
-        verbose_name="кому"
+        verbose_name="кому",
+        related_name='messages_to'
     )
 
     def __str__(self):
@@ -42,7 +42,7 @@ class Message(models.Model):
 class Request(models.Model):
 
     owner = models.ForeignKey(
-        User,
+        "users.User",
         verbose_name='Создатель заявки',
         on_delete=models.CASCADE,
         related_name='requests',
@@ -50,7 +50,6 @@ class Request(models.Model):
     )
     request_text = models.TextField(
         verbose_name="текст заявки",
-
     )
     request_photo = models.ImageField(
         verbose_name='фотографии заявки',
@@ -78,14 +77,9 @@ class Chat(models.Model):
         Request,
         verbose_name='заявка',
         on_delete=models.CASCADE,
+        related_name='chat'
 
 
-    )
-    messages = models.ManyToManyField(
-        Message,
-        verbose_name='сообщения чата',
-        null=True,
-        blank=True,
     )
     is_active = models.BooleanField(
         verbose_name="признак активности",
@@ -93,9 +87,8 @@ class Chat(models.Model):
 
     )
 
-
     def __str__(self):
-        pass
+        return f"{self.pk}"
 
     class Meta:
         verbose_name = "чат"
@@ -103,9 +96,14 @@ class Chat(models.Model):
 
 
 class Filter(models.Model):
+    filter_word = models.CharField(
+        max_length=100,
+        verbose_name="фильтрующее слово",
+
+    )
 
     def __str__(self):
-        pass
+        return f"{self.pk}"
 
     class Meta:
         verbose_name = "фильтр уведомления"
@@ -113,9 +111,23 @@ class Filter(models.Model):
 
 
 class Review(models.Model):
+    seller = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        verbose_name="продавец",
+        related_name="reviews"
+    )
+    rating = models.FloatField(verbose_name='оценка')
+    review_text = models.TextField(verbose_name="текст отзыва")
+    reviewer = models.ForeignKey(
+        "users.User",
+        verbose_name="ревьювер",
+        related_name="writed_reviews",
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
-        pass
+        return f"PK: {self.pk} | Seller: {self.seller}"
 
     class Meta:
         verbose_name = "отзыв"
@@ -123,9 +135,23 @@ class Review(models.Model):
 
 
 class NotifSetting(models.Model):
+    owner = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        verbose_name="владелец настройки",
+        related_name="notif_settings",
+    )
+    tg_notif = models.BooleanField(
+        verbose_name='признак отправки уведомления на telegram',
+        default=False,
+    )
+    email_notif = models.BooleanField(
+        verbose_name='признак отправки уведомления на email',
+        default=False,
+    )
 
     def __str__(self):
-        pass
+        return f"PK: {self.pk} | Owner: {self.owner}"
 
     class Meta:
         verbose_name = "настройка уведомлений"
@@ -133,9 +159,22 @@ class NotifSetting(models.Model):
 
 
 class Store(models.Model):
+    owner = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        verbose_name="владелец магазина",
+    )
+    city = models.CharField(
+        verbose_name="город магазина",
+        max_length=30,
+    )
+    address = models.CharField(
+        verbose_name="адрес магазина",
+        max_length=100,
+    )
 
     def __str__(self):
-        pass
+        return f"PK: {self.pk} | Owner: {self.owner}"
 
     class Meta:
         verbose_name = "магазин"
