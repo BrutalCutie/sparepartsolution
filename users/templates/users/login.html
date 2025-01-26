@@ -1,0 +1,27 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <form method="post">
+        <div class="mt-5 mb-5">
+            <h1>Вход</h1>
+        </div>
+
+
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <button class="btn btn-primary" type="submit">Вход</button>
+        <a href="{% url 'users:register' %}" class="btn btn-primary">Регистрация</a>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}

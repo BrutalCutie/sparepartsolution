@@ -63,6 +63,11 @@ class Request(models.Model):
         default=False,
 
     )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='время создания заявки',
+
+    )
 
     def __str__(self):
         return f"{self.pk} | {self.owner}"

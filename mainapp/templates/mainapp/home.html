@@ -1,0 +1,50 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}hello{% endblock %}
+
+
+{% block content %}
+
+{% if not user.is_authenticated %}
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Пока безымянный сервис</h1>
+                <p class="lead text-body-secondary">Здесь вы можете пока что бесплатно создавать свои заявки по поиску запчастей, на которые откликнутся магазины, свалки, разборы.</p>
+                <p>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary my-2">Вход</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-secondary my-2">Регистрация</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="album py-5 bg-body-tertiary">
+
+    </div>
+
+</main>
+{% else %}
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Добро пожаловать {{user.name}}!</h1>
+                <p>
+                    <a href="#" class="btn btn-primary my-2">Создать заявку</a>
+                    <a href="#" class="btn btn-primary my-2">Мои заявки</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="album py-5 bg-body-tertiary">
+
+    </div>
+
+</main>
+
+{% endif %}
+
+
+{% endblock %}

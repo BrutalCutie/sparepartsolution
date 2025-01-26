@@ -45,11 +45,15 @@ class User(AbstractUser):
     )
     rating = models.FloatField(
         verbose_name='рейтинг продавца',
+        null=True,
+        blank=True,
 
     )
     image = models.ImageField(
         verbose_name="аватар",
         upload_to='media/users/avatars/',
+        null=True,
+        blank=True,
 
     )
 
