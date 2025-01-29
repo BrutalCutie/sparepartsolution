@@ -105,6 +105,8 @@ USE_TZ = False
 
 AUTH_USER_MODEL = 'users.User'
 
+SERVICE_NAME = os.getenv('SERVICE_NAME')
+
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
@@ -112,8 +114,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-LOGIN_REDIRECT_URL = 'mainapp:index'
-LOGOUT_REDIRECT_URL = 'mainapp:index'
+LOGIN_REDIRECT_URL = 'mainapp:home'
+LOGOUT_REDIRECT_URL = 'mainapp:home'
 LOGIN_URL = "users:login"
 
 

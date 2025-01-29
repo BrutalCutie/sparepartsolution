@@ -1,0 +1,20 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}Успешная регистрация{% endblock %}
+
+{% block content %}
+
+<div class="container text-center" style="min-height: 50vh; margin-top: 200px;">
+    <div class="mt-5">
+        <h1>Поздравляем!</h1>
+    </div>
+    <div class="mt-3">
+        <p>Теперь вам открыт доступ к вашему аккаунту.</p>
+        <a href="{% url 'users:login' %}" class="btn btn-primary">Вход</a>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

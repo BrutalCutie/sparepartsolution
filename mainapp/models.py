@@ -66,6 +66,7 @@ class Request(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='время создания заявки',
+        null=True
 
     )
 

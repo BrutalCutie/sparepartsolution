@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from mainapp.models import Store, Filter
+from mainapp.models import Filter
 
 
 class User(AbstractUser):
@@ -16,6 +16,12 @@ class User(AbstractUser):
         null=True,
         blank=True,
 
+    )
+    username = models.CharField(
+        max_length=100,
+        verbose_name='псевдоним',
+        null=True,
+        blank=True,
     )
     phone = models.CharField(
         max_length=20,
@@ -51,14 +57,19 @@ class User(AbstractUser):
     )
     image = models.ImageField(
         verbose_name="аватар",
-        upload_to='media/users/avatars/',
+        upload_to='users/avatars/',
         null=True,
         blank=True,
 
     )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name='признак активности',
+
+    )
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["phone"]
+    REQUIRED_FIELDS = ["phone", "username"]
 
     def __str__(self):
         return f"{self.pk} | {self.username} | is_seller: {self.is_seller}"
@@ -66,3 +77,13 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'пользователь'
         verbose_name_plural = 'пользователи'
+
+
+class RegisterConfirmToken(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='register_token',
+        verbose_name='токен регистрации'
+    )
+    token = models.CharField(max_length=40)

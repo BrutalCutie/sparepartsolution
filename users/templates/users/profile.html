@@ -1,0 +1,36 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5" style="min-height: 70vh">
+    <div class="text-center">
+        <h1>Мой профиль</h1>
+    </div>
+
+    <div class="mt-5 text-center">
+        <img src="
+        {% if user.image %}
+        {{user.image.url}}
+        {% else %}
+        /static/imgs/wo-avatar.png
+        {% endif %}
+        " alt="profile-image" width="200" class="rounded-circle mb-5">
+
+        <h4 class="fw-light">{{ user.name }}</h4>
+        <h4 class="fw-light">{{ user.email }}</h4>
+        <h4 class="fw-light">{{ user.phone }}</h4>
+
+        <a href="{% url 'users:profile-update' %}" class="btn btn-primary">
+            Редактировать
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

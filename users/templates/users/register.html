@@ -1,20 +1,36 @@
 {% extends 'mainapp/base.html' %}
 
-{% block title %}Регистрация{% endblock %}
+
+{% block title %}
+    {% if user.is_authenticated %}
+        Редактирование профиля
+    {% else %}
+        Регистрация
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 
-<div class="container mt5">
-    <div class="text-center">
-        <h1>Регистрация</h1>
+<div class="container mt-5 text-center">
+    <div>
+        {% if not user.is_authenticated %}
+            <h1>Регистрация</h1>
+        {% else %}
+            <h1>Редактирование профиля</h1>
+        {% endif %}
+
     </div>
 
     <div class="mt-5">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{form.as_p}}
+            {% if not user.is_authenticated %}
+                <button class="btn btn-primary" type="submit">Регистрация</button>
+            {% else %}
+                <button class="btn btn-primary" type="submit">Обновить</button>
+            {% endif %}
 
-            <button class="btn btn-primary" type="submit">Регистрация</button>
         </form>
 
     </div>
