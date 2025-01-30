@@ -11,10 +11,8 @@
 
     <div class="mt-5 text-center">
         <img src="
-        {% if user.image %}
-        {{user.image.url}}
-        {% else %}
-        /static/imgs/wo-avatar.png
+        {% if user.image %}{{user.image.url}}
+        {% else %}/static/imgs/wo-avatar.png
         {% endif %}
         " alt="profile-image" width="200" class="rounded-circle mb-5">
 

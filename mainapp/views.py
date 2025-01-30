@@ -1,0 +1,55 @@
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy, reverse
+from mainapp.models import Request
+from mainapp.forms import RequestCreateForm
+
+
+class RequestCreateView(LoginRequiredMixin, CreateView):
+    template_name = "mainapp/requests/request_create.html"
+    form_class = RequestCreateForm
+
+    success_url = reverse_lazy('mainapp:my-requests-list')
+
+    def form_valid(self, form):
+        request = form.save()
+        user = self.request.user
+        request.owner = user
+        if request.city_not_matter:
+            request.city = 'Все города'
+        request.save()
+
+        return super().form_valid(form)
+
+
+class RequestListView(ListView):
+    model = Request
+    template_name = "mainapp/requests/requests-list.html"
+    context_object_name = "requests"
+
+
+class MyRequestListView(RequestListView):
+
+    def get_queryset(self):
+        my_requests = Request.objects.filter(owner=self.request.user)
+
+        return my_requests
+
+
+class RequestDetailView(DetailView):
+    model = Request
+    template_name = "mainapp/requests/request-detail.html"
+    context_object_name = 'request_model'
+
+
+class RequestUpdateView(UpdateView):
+    template_name = "mainapp/requests/request_create.html"
+    model = Request
+    form_class = RequestCreateForm
+
+    def get_success_url(self):
+        return reverse("mainapp:request-detail", kwargs={"pk": self.object.pk})
+
+
+class RequestDeleteView(DeleteView):
+    pass

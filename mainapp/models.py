@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms.widgets import CheckboxInput
 
 
 class Message(models.Model):
@@ -46,16 +47,47 @@ class Request(models.Model):
         verbose_name='Создатель заявки',
         on_delete=models.CASCADE,
         related_name='requests',
+        null=True,
+        blank=True,
 
     )
-    request_text = models.TextField(
+    car = models.CharField(
+        verbose_name='марка',
+        max_length=30,
+    )
+    model = models.CharField(
+        verbose_name='модель',
+        max_length=30,
+        default="",
+    )
+    year = models.PositiveSmallIntegerField(
+        verbose_name="год",
+        null=True,
+        blank=True,
+        default=None,
+
+    )
+    city = models.CharField(
+        verbose_name="город",
+        help_text="укажите город, если хотите уменьшить количество поступаемых предложений",
+        blank=True,
+        null=True,
+        max_length=30
+    )
+    city_not_matter = models.BooleanField(
+        verbose_name='Город не важен',
+        help_text="город в поле выше учитываться не будет",
+        blank=True,
+    )
+
+    text = models.TextField(
         verbose_name="текст заявки",
     )
-    request_photo = models.ImageField(
+    photo = models.ImageField(
         verbose_name='фотографии заявки',
         blank=True,
         null=True,
-        upload_to="media/request_photos/",
+        upload_to="request_photos/",
 
     )
     is_active = models.BooleanField(
@@ -67,7 +99,6 @@ class Request(models.Model):
         auto_now_add=True,
         verbose_name='время создания заявки',
         null=True
-
     )
 
     def __str__(self):

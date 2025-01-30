@@ -1,0 +1,63 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}
+{% if 'my_requests' in request.path %}Список моих заявок
+{% else %}Список заявок
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+<main style="min-height: 60vh;">
+    <div class="container">
+        <h1 class="mt-5">
+            {% if 'my_requests' in request.path %}Ваши заявки
+            {% else %}Активные заявки
+            {% endif %}
+            <a href="{% url 'mainapp:request-create' %}" class="btn btn-primary">Создать</a>
+        </h1>
+    </div>
+
+    <div class="album py-5 bg-body-tertiary mt-5">
+        <div class="container">
+            {% for request in requests %}
+            <div class="card mb-3" style="width: 50rem;">
+                <div class="row g-0">
+                    <div class="col-md-2">
+                        <img src="{% if request.photo %}{{request.photo.url}}{% else %}/static/imgs/wo-image.bmp{% endif %}"
+                             class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-9">
+                        <a class="nav-link" href="{% url 'mainapp:request-detail' request.pk%}">
+                            <div class="card-body">
+
+                                <h5 class="card-title">{{request.car}} {{request.model}}</h5>
+                                <h5 class="card-title">{{request.year}}</h5>
+
+                                <p class="card-text">{{request.text|truncatechars:155}}</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-1 mt-2">
+                        <p class="card-text"><small class="text-body-secondary">{{request.city}}</small></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+
+</main>
+
+
+<!--начало отображения активных заявок-->
+
+
+{% endblock %}
+
+
+<!--                    href="{% url 'mainapp:request-detail' request.pk%}" {{request.car}} {{request.model}} {{request.year}}-->
+<!--                    src="{% if request.photo %}{{request.photo.url}}{% else %}/static/imgs/wo-image.bmp{% endif %}"-->
+<!--                        <p>{{request.text|truncatechars:200}}</p>-->

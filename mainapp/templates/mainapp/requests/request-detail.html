@@ -1,0 +1,54 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}{{request_model.car}}{{request_model.model}}{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="mt-5">
+        <a class="btn btn-primary" href="{% url 'mainapp:my-requests-list' %}">Назад</a>
+        {% if request_model.owner == request.user %}<a class="btn btn-warning" href="{% url 'mainapp:request-update' request_model.pk %}">Изменить</a>
+        {% endif %}
+
+    </div>
+    <div class="mt-5">
+        <h1>
+            {{request_model.car}} {{request_model.model}}
+        </h1>
+        <h1>
+            {{request_model.year}}
+        </h1>
+        <h1>
+            {{request_model.city}}
+        </h1>
+
+
+    </div>
+    <div class="album py-5 bg-body-tertiary mt-5">
+        <div class="container">
+
+            <div>
+                <h4 class="fw-light">{{request_model.text}}</h4>
+
+
+            </div>
+
+            {% if request_model.photo %}
+            <div class="mt-5">
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#showImage"
+                        aria-expanded="false" aria-controls="showImage">
+                    Показать фото
+                </button>
+            </div>
+            <div class="collapse" id="showImage">
+                <div class="card card-body">
+                    <img src="{{request_model.photo.url}}" width="600rem" alt="request img">
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
