@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from mainapp.models import Request
@@ -6,7 +6,7 @@ from mainapp.forms import RequestCreateForm
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
-    template_name = "mainapp/requests/request_create.html"
+    template_name = "mainapp/requests/request-create.html"
     form_class = RequestCreateForm
 
     success_url = reverse_lazy('mainapp:my-requests-list')
@@ -43,7 +43,7 @@ class RequestDetailView(DetailView):
 
 
 class RequestUpdateView(UpdateView):
-    template_name = "mainapp/requests/request_create.html"
+    template_name = "mainapp/requests/request-create.html"
     model = Request
     form_class = RequestCreateForm
 
@@ -52,4 +52,6 @@ class RequestUpdateView(UpdateView):
 
 
 class RequestDeleteView(DeleteView):
-    pass
+    model = Request
+    template_name = "mainapp/requests/request-delete-confirm.html"
+    success_url = reverse_lazy("mainapp:my-requests-list")

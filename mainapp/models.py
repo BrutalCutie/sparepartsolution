@@ -114,18 +114,23 @@ class Chat(models.Model):
         Request,
         verbose_name='заявка',
         on_delete=models.CASCADE,
-        related_name='chat'
-
-
+        related_name='chats'
     )
     is_active = models.BooleanField(
         verbose_name="признак активности",
-        default=False,
-
+        default=True,
+    )
+    created_by = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        verbose_name='инициатор чата',
+        default=None,
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
-        return f"{self.pk}"
+        return f"pk: {self.pk} | request pk {self.request.pk} | created_by pk {self.created_by.pk} "
 
     class Meta:
         verbose_name = "чат"
