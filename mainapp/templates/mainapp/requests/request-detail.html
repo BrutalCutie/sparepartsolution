@@ -1,5 +1,5 @@
 {% extends 'mainapp/base.html' %}
-{% block title %}{{request_model.car}}{{request_model.model}}{% endblock %}
+{% block title %}{{request_model.car}} {{request_model.model}}{% endblock %}
 
 
 {% block content %}
@@ -11,7 +11,7 @@
         <a class="btn btn-warning" href="{% url 'mainapp:request-update' request_model.pk %}">🛠Изменить</a>
         <a class="btn btn-danger" href="{% url 'mainapp:request-delete' request_model.pk %}">🗑Удалить</a>
         {% else %}
-        <a class="btn btn-primary" href="#">🗨Написать сообщение💬</a>
+        <a class="btn btn-primary" href="{% url 'mainapp:new-message' request_model.pk %}">🗨Написать сообщение💬</a>
         {% endif %}
 
     </div>

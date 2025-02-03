@@ -1,0 +1,24 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}Новое сообщение{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="mt-5">
+        <h1>
+            Новое сообщение
+        </h1>
+        <div class="mt-5">
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+
+                {{ form.as_p }}
+                <button class="btn btn-success" type="submit">Написать</button>
+                <a class="btn btn-primary" href="{% url 'mainapp:request-detail' request.pk %}">Назад</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

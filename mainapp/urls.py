@@ -1,4 +1,4 @@
-from mainapp.views import request,chat
+from mainapp.views import request, chat, message
 
 from mainapp.apps import MainappConfig
 
@@ -15,12 +15,11 @@ urlpatterns = [
     path("request/my_requests/", request.MyRequestListView.as_view(), name='my-requests-list'),
     path("request/update/<int:pk>/", request.RequestUpdateView.as_view(), name='request-update'),
     path("request/detail/<int:pk>/", request.RequestDetailView.as_view(), name='request-detail'),
+    path("request/detail/<int:pk>/new_message/", message.MessageCreateView.as_view(), name='new-message'),
     path("request/delete/<int:pk>/", request.RequestDeleteView.as_view(), name='request-delete'),
 
-    path("chat/create/", chat.ChatCreateView.as_view(), name='chat-create'),
     path("chat/list/", chat.ChatListView.as_view(), name='chats-list'),
-    path("chat/update/<int:pk>/", chat.ChatUpdateView.as_view(), name='chat-update'),
     path("chat/detail/<int:pk>/", chat.ChatDetailView.as_view(), name='chat-detail'),
-    path("chat/delete/<int:pk>/", chat.ChatDeleteView.as_view(), name='chat-delete'),
+
 
 ]

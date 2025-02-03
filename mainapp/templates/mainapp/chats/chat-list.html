@@ -1,0 +1,50 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}Чаты{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-5" style="min-height: 60vh;">
+
+    <div class="row">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Чаты</h1>
+        </div>
+
+        <div class="col-md-3">
+            <ul class="list-group">
+                {% for chat in chats %}
+                <li class="list-group-item">
+
+                    <a class="nav-link" href="#">
+                        <h3 class="fw-light">{{ chat.request.car }} {{ chat.request.model }} {{ chat.request.year}}</h3>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        {% endfor %}
+        <div class="col-md-9">
+            <div class="card">
+                <div style="overflow-y: auto; height: 20rem; ">
+
+
+                    <h3 class="fw-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad alias, aliquam beatae
+                        culpa debitis delectus deserunt distinctio ducimus eius eligendi error facilis fugiat fugit
+                        harum illum impedit incidunt inventore ipsam itaque molestias nam neque nostrum odit placeat
+                        quidem ratione sapiente tempore temporibus ullam unde vel voluptas voluptatibus! Ab accusamus
+                        alias blanditiis cum iure magni possimus quis quos rerum soluta. Alias commodi deserunt dolor,
+                        enim eveniet exercitationem modi praesentium quidem quos reiciendis repellendus sunt totam. A
+                        adipisci amet dolor dolorem, eos error eveniet laborum modi odit, quaerat quas quis sapiente
+                        temporibus vel veniam. Autem inventore, nesciunt! Ea, laboriosam, omnis. Eligendi!</h3>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

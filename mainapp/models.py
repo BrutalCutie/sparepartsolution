@@ -1,5 +1,4 @@
 from django.db import models
-from django.forms.widgets import CheckboxInput
 
 
 class Message(models.Model):
@@ -7,7 +6,9 @@ class Message(models.Model):
         'Chat',
         verbose_name="чат к которому привязано сообщение",
         on_delete=models.CASCADE,
-        related_name='chat'
+        related_name='chat',
+        blank=True,
+        null=True,
     )
     message_text = models.TextField(
         verbose_name='текст сообщения',
@@ -15,25 +16,37 @@ class Message(models.Model):
     )
     image = models.ImageField(
         verbose_name="фото сообщения",
-        upload_to=f'media/photos/message_photos/'
+        upload_to=f'media/photos/message_photos/',
+        null=True,
+        blank=True,
 
     )
     from_user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
         verbose_name="от",
-        related_name='messages_from'
+        related_name='messages_from',
+        null=True,
+        blank=True,
 
     )
     to_user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
         verbose_name="кому",
-        related_name='messages_to'
+        related_name='messages_to',
+        null=True,
+        blank=True,
+    )
+    sended_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='время отправки',
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
-        return f"{self.pk} | from: {self.from_user} | to: {self.to_user}"
+        return f"{self.pk} | from: {self.from_user.pk} | to: {self.to_user.pk}"
 
     class Meta:
         verbose_name = "сообщение"
@@ -118,7 +131,7 @@ class Chat(models.Model):
     )
     is_active = models.BooleanField(
         verbose_name="признак активности",
-        default=True,
+        default=False,
     )
     created_by = models.ForeignKey(
         "users.User",
@@ -130,7 +143,7 @@ class Chat(models.Model):
     )
 
     def __str__(self):
-        return f"pk: {self.pk} | request pk {self.request.pk} | created_by pk {self.created_by.pk} "
+        return f"pk: {self.pk} | request owner pk {self.request.owner.pk} | created_by user pk {self.created_by.pk} "
 
     class Meta:
         verbose_name = "чат"
