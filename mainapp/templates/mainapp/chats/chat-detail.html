@@ -1,18 +1,22 @@
 {% extends 'mainapp/base.html' %}
-{% block title %}Чаты{% endblock %}
+{% block title %}Чат - {{chat.request.car}} {{chat.request.model}} {{chat.request.year}}{% endblock %}
 
 
 {% block content %}
 <div class="container mt-5" style="min-height: 60vh;">
 
-    <div class="text-center mb-5">
+        <div class="text-center mb-5">
         <h1 class="fw-bold">Чаты</h1>
     </div>
     <div class="row">
         <div class="col-md-3">
             {% include 'mainapp/chats/chats-div.html' %}
         </div>
+        <div class="col-md-9">
+            {% include 'mainapp/chats/chat-messages-div.html' %}
+        </div>
     </div>
+
 </div>
 
 

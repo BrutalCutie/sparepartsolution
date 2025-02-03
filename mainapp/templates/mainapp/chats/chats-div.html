@@ -1,0 +1,14 @@
+
+<ul class="list-group">
+
+    {% for chat in chats %}
+    <li class="list-group-item">
+
+        <a class="nav-link" href="{% url 'mainapp:chat-detail' chat.pk %}">
+            <h3 class="fw-light">{{ chat.request.car }} {{ chat.request.model }} {{ chat.request.year}}</h3>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+
