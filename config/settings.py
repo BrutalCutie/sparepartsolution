@@ -1,4 +1,6 @@
 import os
+import sys
+
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -28,6 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    "django_celery_beat",
 
     'users',
     'mainapp',
@@ -71,11 +75,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
+        'NAME': os.getenv('POSTGERS_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT'),
 
     }
 }
@@ -118,9 +122,14 @@ LOGIN_REDIRECT_URL = 'mainapp:home'
 LOGOUT_REDIRECT_URL = 'users:login'
 LOGIN_URL = "users:login"
 
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -133,4 +142,13 @@ EMAIL_USE_SSL = True if os.getenv("EMAIL_USE_SSL") == "True" else False
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Настройки для локальной разработки без использования gunicorn через runserver
+if 'runserver' in sys.argv:
+    DATABASES['default']['DB'] = DATABASES['default']['NAME']
+    DATABASES['default']['HOST'] = os.getenv('HOST')
+
+    CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+    CELERY_BROKER_URL = "redis://localhost:6379/0"
 

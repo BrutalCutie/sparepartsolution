@@ -1,0 +1,100 @@
+version: '3.9'
+
+services:
+
+  redis:
+    image: redis:latest
+    container_name: sps_redis
+    restart: on-failure
+
+  db:
+    image:
+      postgres
+    container_name: sps_psql
+    restart: on-failure
+    env_file:
+      - .env
+
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+    expose:
+      - "5432"
+
+    healthcheck:
+      test: [ "CMD-SHELL", "-c", "pg_isready -U $POSTGRES_USER" ]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+
+  app:
+    build: .
+    container_name: sps_app
+    tty: true
+    expose:
+      - "8000"
+
+    command: >
+      sh -c "python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+
+    env_file:
+      - .env
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    volumes:
+      - .:/app
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: sps_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    volumes:
+      - ./static:/app/static
+
+  celery:
+    build: .
+    tty: true
+    container_name: sps_celery
+    command: celery -A config worker -l INFO
+    restart: on-failure
+    env_file:
+      - .env
+
+    volumes:
+      - .:/app
+
+    depends_on:
+      - redis
+      - db
+      - app
+
+  celery-beat:
+      build: .
+      container_name: sps_celery_beat
+      tty: true
+      command: celery -A config beat -l INFO
+      restart: on-failure
+
+      env_file:
+        - .env
+
+      volumes:
+        - .:/app
+
+      depends_on:
+        - redis
+        - db
+        - app
+        - celery
+
+
+volumes:
+  pg_data:
