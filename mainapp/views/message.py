@@ -12,11 +12,12 @@ class MessageCreateView(CreateView):
     form_class = MessageCreateForm
 
     def form_valid(self, form):
+
         message = form.save()
         request_pk = self.kwargs.get('pk')
         request = get_object_or_404(Request, pk=request_pk)
         user = self.request.user
-        chat = Chat.objects.filter(Q(request__owner=user) | Q(created_by=user)).first()
+        chat = Chat.objects.filter(request__owner=request.owner, created_by=user, request=request).first()
         if not chat:
             chat = Chat.objects.create(
                 is_active=True,
@@ -25,9 +26,9 @@ class MessageCreateView(CreateView):
             )
         message.chat = chat
         message.to_user = chat.request.owner
-        message.from_user = self.request.user
-
+        message.from_user = user
         message.save()
+        self.kwargs['redirect_to_chat_pk'] = chat.pk
 
         return super().form_valid(form)
 
@@ -38,20 +39,28 @@ class MessageCreateView(CreateView):
         return context
 
     def get_success_url(self):
-        return reverse('mainapp:request-detail', kwargs={'pk': self.kwargs.get('pk')})
+        return reverse('mainapp:chat-detail', kwargs={'pk': self.kwargs.get('redirect_to_chat_pk')})
 
 
-class MessageListView(ListView):
-    pass
+class ChatNewMessage(LoginRequiredMixin, CreateView):
+    template_name = "mainapp/messages/new-chat-message.html"
+    form_class = MessageCreateForm
+    
+    def form_valid(self, form):
+        message = form.save()
+        chat = Chat.objects.get(pk=self.kwargs['pk'])
+        chat.save()
+        user = self.request.user
+        message.chat = chat
+        message.from_user = user
 
+        if user == chat.request.owner:
+            message.to_user = chat.created_by
+        else:
+            message.to_user = chat.request.owner
+        message.save()
 
-class MessageDetailView(DetailView):
-    pass
+        return super().form_valid(form)
 
-
-class MessageUpdateView(UpdateView):
-    pass
-
-
-class MessageDeleteView(DeleteView):
-    pass
+    def get_success_url(self):
+        return reverse('mainapp:chat-detail', kwargs={'pk': self.kwargs.get('pk')})

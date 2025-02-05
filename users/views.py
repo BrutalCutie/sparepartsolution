@@ -15,6 +15,7 @@ class UserCreateView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        user.is_active = False
         host = self.request.get_host()
         UserService.send_confirm_mail_message(user.pk, host)
 

@@ -20,6 +20,7 @@ urlpatterns = [
 
     path("chat/list/", chat.ChatListView.as_view(), name='chats-list'),
     path("chat/detail/<int:pk>/", chat.ChatDetailView.as_view(), name='chat-detail'),
+    path("chat/detail/<int:pk>/new_message/", message.ChatNewMessage.as_view(), name='chat-new-message'),
 
 
 ]

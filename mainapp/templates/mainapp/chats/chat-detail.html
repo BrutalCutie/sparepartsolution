@@ -5,16 +5,27 @@
 {% block content %}
 <div class="container mt-5" style="min-height: 60vh;">
 
-        <div class="text-center mb-5">
+    <div class="text-center mb-5">
         <h1 class="fw-bold">Чаты</h1>
     </div>
     <div class="row">
+
+<!--        список чатов-->
         <div class="col-md-3">
             {% include 'mainapp/chats/chats-div.html' %}
         </div>
+
+<!--        окно чата-->
         <div class="col-md-9">
+            <div>
+                <a class="nav-link" href="{% url 'mainapp:request-detail' request_model.pk %}">К заявке -></a>
+            </div>
             {% include 'mainapp/chats/chat-messages-div.html' %}
+            <div class="mt-2">
+                <a href="{% url 'mainapp:chat-new-message' chat.pk %}" class="btn btn-primary">Написать новое сообщение</a>
+            </div>
         </div>
+
     </div>
 
 </div>

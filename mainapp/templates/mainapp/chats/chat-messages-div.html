@@ -1,7 +1,17 @@
 <div class="card">
-    <div style="overflow-y: auto; height: 20rem; ">
+    <div class="mt-2" style="overflow-y: auto; height: 20rem; ">
         {% for message in messages %}
-        <p>{{message.message_text}}</p>
+
+        <div class="mx-2 {% if message.from_user == request.user %}text-end{% endif %}">
+
+            <p class="fw-bold">
+                <small>
+                    <span class="text-black-50">{{message.sended_at|date:"m.d"}} {{message.sended_at|time:"H:i"}}</span>
+                    {{message.from_user.name}}
+                </small>
+            </p>
+            <p style="margin-top: -1.2rem;">{{message.message_text|linebreaks}}</p>
+        </div>
 
         {% endfor %}
     </div>

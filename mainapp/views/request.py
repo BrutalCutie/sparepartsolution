@@ -1,7 +1,7 @@
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
-from mainapp.models import Request
+from mainapp.models import Request, Chat
 from mainapp.forms import RequestCreateForm
 
 
@@ -40,6 +40,14 @@ class RequestDetailView(DetailView):
     model = Request
     template_name = "mainapp/requests/request-detail.html"
     context_object_name = 'request_model'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['chat_exists'] = Chat.objects.filter(created_by=user, request=self.object.pk).first()
+
+        return context
 
 
 class RequestUpdateView(UpdateView):

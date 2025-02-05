@@ -44,6 +44,10 @@ class Message(models.Model):
         null=True,
         blank=True,
     )
+    readed = models.BooleanField(
+        verbose_name="признак просмотрености",
+        default=False
+    )
 
     def __str__(self):
         return f"{self.pk} | from: {self.from_user.pk} | to: {self.to_user.pk}"
@@ -140,6 +144,11 @@ class Chat(models.Model):
         default=None,
         blank=True,
         null=True,
+    )
+    last_updated = models.DateTimeField(
+        verbose_name='дата последнего обновления',
+        auto_now=True,
+        null=True
     )
 
     def __str__(self):

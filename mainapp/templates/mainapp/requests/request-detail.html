@@ -6,12 +6,17 @@
 
 <div class="container">
     <div class="mt-5">
-        <a class="btn btn-primary" href="{% url 'mainapp:my-requests-list' %}">⬅Назад</a>
+        <a class="btn btn-primary" href="{% url 'mainapp:requests-list' %}">⬅Назад</a>
         {% if request_model.owner == request.user %}
         <a class="btn btn-warning" href="{% url 'mainapp:request-update' request_model.pk %}">🛠Изменить</a>
         <a class="btn btn-danger" href="{% url 'mainapp:request-delete' request_model.pk %}">🗑Удалить</a>
         {% else %}
-        <a class="btn btn-primary" href="{% url 'mainapp:new-message' request_model.pk %}">🗨Написать сообщение💬</a>
+            {% if chat_exists %}
+                <a class="btn btn-primary" href="{% url 'mainapp:chat-detail' chat_exists.pk %}">🗨Перейти к чату💬</a>
+            {% else %}
+                <a class="btn btn-primary" href="{% url 'mainapp:new-message' request_model.pk %}">🗨Написать сообщение💬</a>
+            {% endif %}
+
         {% endif %}
 
     </div>

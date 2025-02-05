@@ -26,11 +26,11 @@
                 <div class="card mb-1">
 
                     <div class="row g-0">
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-lg-2">
                             <img src="{% if request_model.photo %}{{request_model.photo.url}}{% else %}/static/imgs/wo-image.bmp{% endif %}"
                                  class="img-fluid rounded-start" alt="..." style="min-width:10rem; max-height:10rem;">
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-8 col-lg-9">
 
                             <div class="card-body">
 
@@ -43,7 +43,9 @@
                         </div>
                         <div class="col-md-1 mt-2">
                             <p class="card-text"><small class="text-body-secondary">{{request_model.city}}</small></p>
+                            <p><small>{{request_model.created_at|time:"H:i" }}</small></p>
                         </div>
+
                     </div>
                 </div>
             </a>

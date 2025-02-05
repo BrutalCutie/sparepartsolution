@@ -63,7 +63,7 @@ class User(AbstractUser):
 
     )
     is_active = models.BooleanField(
-        default=False,
+        default=True,
         verbose_name='признак активности',
 
     )

@@ -41,3 +41,4 @@ class MessageCreateForm(ModelForm):
             "message_text",
             "image",
         )
+
