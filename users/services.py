@@ -1,9 +1,8 @@
 import secrets
 
-from django.core.mail import send_mail
-
-from config.settings import EMAIL_HOST_USER, SERVICE_NAME
+from config.settings import SERVICE_NAME
 from users.models import User, RegisterConfirmToken
+from users.tasks import send_email_confirmation_url
 
 
 class UserService:
@@ -17,14 +16,13 @@ class UserService:
             token=token,
 
         )
-        url = f"http://{host}/users/success-email-confirmation/{token}"
 
-        subject = f"Подтверждение почты {SERVICE_NAME}"
-        message_text = f"Для получения доступа к сервису, пройдите пожалуйста по ссылке ниже:\n\n{url}"
+        data = {
+            'user_email': user.email,
+            'url': f"http://{host}/users/success-email-confirmation/{token}",
+            "subject": f"Подтверждение почты {SERVICE_NAME}",
+        }
 
-        send_mail(
-            subject=subject,
-            message=message_text,
-            from_email=EMAIL_HOST_USER,
-            recipient_list=[user.email],
-        )
+        data["message_text"] = f"Для получения доступа к сервису, пройдите пожалуйста по ссылке ниже:\n\n{data['url']}"
+
+        send_email_confirmation_url.delay(data)
