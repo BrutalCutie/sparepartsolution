@@ -145,7 +145,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 # Настройки для локальной разработки без использования gunicorn
-DATABASES['default']['HOST'] = os.getenv('HOST')
-DATABASES['default']['NAME'] = os.getenv('NAME')
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
-CELERY_BROKER_URL = "redis://localhost:6379/0"
+# DATABASES['default']['HOST'] = os.getenv('HOST')
+# DATABASES['default']['NAME'] = os.getenv('NAME')
+# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+# CELERY_BROKER_URL = "redis://localhost:6379/0"
