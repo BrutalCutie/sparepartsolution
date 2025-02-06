@@ -38,7 +38,14 @@ class User(AbstractUser):
         default=False,
         null=True,
         blank=True,
-
+    )
+    store = models.ForeignKey(
+        'mainapp.Store',
+        on_delete=models.CASCADE,
+        verbose_name='магазин пользователя',
+        null=True,
+        blank=True,
+        default=None,
     )
 
     filter = models.ForeignKey(
@@ -60,6 +67,7 @@ class User(AbstractUser):
         upload_to='users/avatars/',
         null=True,
         blank=True,
+        default='/users/avatars/wo-avatar.png'
 
     )
     is_active = models.BooleanField(

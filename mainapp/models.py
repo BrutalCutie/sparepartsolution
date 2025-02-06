@@ -105,6 +105,7 @@ class Request(models.Model):
         blank=True,
         null=True,
         upload_to="request_photos/",
+        default='/request_photos/wo-image.bmp',
 
     )
     is_active = models.BooleanField(
@@ -223,10 +224,11 @@ class NotifSetting(models.Model):
 
 
 class Store(models.Model):
-    owner = models.ForeignKey(
-        "users.User",
-        on_delete=models.CASCADE,
-        verbose_name="владелец магазина",
+
+    name = models.CharField(
+        verbose_name='название магазина',
+        max_length=100,
+        null=True,
     )
     city = models.CharField(
         verbose_name="город магазина",
@@ -238,7 +240,7 @@ class Store(models.Model):
     )
 
     def __str__(self):
-        return f"PK: {self.pk} | Owner: {self.owner}"
+        return f"PK: {self.pk}"
 
     class Meta:
         verbose_name = "магазин"

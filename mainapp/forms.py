@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from mainapp.models import Request, Chat, Message
+from mainapp.models import Request, Chat, Message, Store
 
 
 class RequestCreateForm(ModelForm):
@@ -42,3 +42,14 @@ class MessageCreateForm(ModelForm):
             "image",
         )
 
+
+class StoreCreateForm(ModelForm):
+
+    class Meta:
+        model = Store
+
+        fields = (
+            "city",
+            "address",
+            "name",
+        )

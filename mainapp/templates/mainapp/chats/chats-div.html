@@ -3,10 +3,33 @@
 
         {% for chat in chats %}
         <li class="list-group-item {% if request.resolver_match.kwargs.pk == chat.pk %}active{% endif %}">
+            <div class="row">
+                <div class="col-md-3">
+                    {% if chat.created_by == user %}
+                    <img src="{{chat.request.photo.url}}" alt="request-image" width="50rem" class="rounded-circle mt-2">
+                    {% else %}<img src="{{chat.created_by.image.url}}" alt="profile-image" width="50rem" class="rounded-circle mt-2">
+                    {% endif %}
 
-            <a class="nav-link" href="{% url 'mainapp:chat-detail' chat.pk %}">
-                <h3 class="fw-light">{% if chat.pk in unreaded %}🔴{% endif %}{{ chat.request.car }} {{ chat.request.model }} {{ chat.request.year}}</h3>
+                </div>
+                <div class="col-md-9">
+                    <a class="nav-link" href="{% url 'mainapp:chat-detail' chat.pk %}">
+
+                <h3>
+<!--                    признак непрочитанного письма-->
+                    {% if chat.pk in unreaded %}
+                    ✉
+                    {% endif %}
+
+                    {% if chat.request.owner == request.user %}{{ chat.created_by.store.name }}
+                    {% else %}{{ chat.request.owner.name }}
+                    {% endif %}
+
+                </h3>
+                <p class="fw-light">{{ chat.request.car }} {{ chat.request.model }} {{ chat.request.year}}</p>
             </a>
+                </div>
+            </div>
+
         </li>
         {% endfor %}
     </ul>

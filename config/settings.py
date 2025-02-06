@@ -144,11 +144,8 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
-# Настройки для локальной разработки без использования gunicorn через runserver
-if 'runserver' in sys.argv:
-    DATABASES['default']['DB'] = DATABASES['default']['NAME']
-    DATABASES['default']['HOST'] = os.getenv('HOST')
-
-    CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
-    CELERY_BROKER_URL = "redis://localhost:6379/0"
-
+# Настройки для локальной разработки без использования gunicorn
+DATABASES['default']['HOST'] = os.getenv('HOST')
+DATABASES['default']['NAME'] = os.getenv('NAME')
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_BROKER_URL = "redis://localhost:6379/0"

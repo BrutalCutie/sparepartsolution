@@ -1,0 +1,30 @@
+{% extends 'mainapp/base.html' %}
+{% block title %}
+    {% if user.store.name %}Редактирование магазина
+    {% else %}Добавление магазина
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="mt-5">
+        <h1>
+            {% if user.store.name %}Редактирование магазина
+            {% else %}Добавление магазина
+            {% endif %}
+        </h1>
+        <div class="mt-5">
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+
+                {{ form.as_p }}
+                <button class="btn btn-success" type="submit">Создать</button>
+                <a class="btn btn-primary" href="{% url 'users:profile'%}">Назад</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

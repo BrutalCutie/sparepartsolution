@@ -7,24 +7,78 @@
 <div class="container mt-5" style="min-height: 70vh">
     <div class="text-center">
         <h1>Мой профиль</h1>
-    </div>
-
-    <div class="mt-5 text-center">
-        <img src="
-        {% if user.image %}{{user.image.url}}
-        {% else %}/static/imgs/wo-avatar.png
-        {% endif %}
-        " alt="profile-image" width="200" class="rounded-circle mb-5">
-
-        <h4 class="fw-light">{{ user.name }}</h4>
-        <h4 class="fw-light">{{ user.email }}</h4>
-        <h4 class="fw-light">{{ user.phone }}</h4>
-
         <a href="{% url 'users:profile-update' %}" class="btn btn-primary">
             Редактировать
         </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 mt-5">
+            <img src="{{user.image.url}}" alt="profile-image" width="400" class="rounded-circle mb-5">
+        </div>
+        <div class="col-md-7 mt-5">
+            <div>
+
+                <div>
+                    <h3>Имя: <span class="fw-light">{{user.name}}</span></h3>
+                </div>
+
+                <div>
+                    <h3>Почта: <span class="fw-light">{{user.email}}</span></h3>
+                </div>
+
+                <div>
+                    <h3>Телефон: <span class="fw-light">{{user.phone}}</span></h3>
+                </div>
+
+                <div>
+                    <h3>
+                        Статус: <span class="fw-light">{{user.is_seller|yesno:"Продавец,Пользователь"}}</span>
+                    </h3>
+                </div>
+
+                {% if not user.is_seller %}
+                <div>
+                    <a href="{% url 'mainapp:store-create' %}" class="btn btn-primary">Добавить свой магазин</a>
+                </div>
+                {% else %}
+                <div class="row mt-4">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11">
+                        <div>
+                            <h1 class="fw-light">Информация о магазине</h1>
+                        </div>
+                    </div>
 
 
+                </div>
+                <div class="row mt-4">
+
+                    <div>
+                        <h3>
+                            Название: <span class="fw-light">{{user.store.name}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3>
+                            Город: <span class="fw-light">{{user.store.city}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3>
+                            Адрес: <span class="fw-light">{{user.store.address}}</span>
+                        </h3>
+                    </div>
+
+
+                </div>
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
     </div>
 
 

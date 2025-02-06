@@ -1,4 +1,4 @@
-from mainapp.views import request, chat, message
+from mainapp.views import request, chat, message, store
 
 from mainapp.apps import MainappConfig
 
@@ -21,6 +21,8 @@ urlpatterns = [
     path("chat/list/", chat.ChatListView.as_view(), name='chats-list'),
     path("chat/detail/<int:pk>/", chat.ChatDetailView.as_view(), name='chat-detail'),
     path("chat/detail/<int:pk>/new_message/", message.ChatNewMessage.as_view(), name='chat-new-message'),
+
+    path("users/store/", store.StoreCreateView.as_view(), name='store-create'),
 
 
 ]
