@@ -124,6 +124,7 @@ LOGIN_URL = "users:login"
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 
@@ -147,5 +148,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Настройки для локальной разработки без использования gunicorn
 # DATABASES['default']['HOST'] = os.getenv('HOST')
 # DATABASES['default']['NAME'] = os.getenv('NAME')
-# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+
 # CELERY_BROKER_URL = "redis://localhost:6379/0"
+# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_BROKER_URL = os.getenv('BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('RESULT_BACKEND')

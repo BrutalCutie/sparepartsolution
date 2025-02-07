@@ -51,7 +51,7 @@ def email_confirm(request, token):
     register_token = RegisterConfirmToken.objects.filter(token=token)
     if not register_token.exists() and request.method == 'GET':
         return render(request, 'mainapp/wrong_register_token.html')
-    user = get_object_or_404(User, pk=register_token.user.pk)
+    user = get_object_or_404(User, register_token=register_token.first())
     user.is_active = True
     user.save()
     register_token.delete()
