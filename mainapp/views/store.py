@@ -1,4 +1,4 @@
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from mainapp.forms import StoreCreateForm
 from django.urls import reverse_lazy
 
@@ -21,3 +21,13 @@ class StoreCreateView(CreateView):
         user.save()
 
         return super().form_valid(form)
+
+
+class StoreUpdateView(UpdateView):
+    model = Store
+    form_class = StoreCreateForm
+    template_name = 'mainapp/stores/store-create.html'
+    success_url = reverse_lazy('users:profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user.store

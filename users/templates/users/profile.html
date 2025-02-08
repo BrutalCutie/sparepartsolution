@@ -30,10 +30,21 @@
                 <div>
                     <h3>Телефон: <span class="fw-light">{{user.phone}}</span></h3>
                 </div>
+                {% if user.tg_id %}
+                <div>
+                    <h3>Telegram ID: <span class="fw-light">{{user.tg_id}}</span></h3>
+                </div>
+                {% else %}
+                {% endif %}
 
                 <div>
                     <h3>
                         Статус: <span class="fw-light">{{user.is_seller|yesno:"Продавец,Пользователь"}}</span>
+                    </h3>
+                </div>
+                <div>
+                    <h3>
+                        Уведомления: <span class="fw-light">{{user.notif_tg|yesno:"telegram,"}} {{user.notif_email|yesno:"email,"}}{% if not user.notif_tg and not user.notif_email %}Не выбраны{% endif %} #TODO инфо для получения уведомлений по тг</span>
                     </h3>
                 </div>
 
@@ -53,25 +64,39 @@
 
                 </div>
                 <div class="row mt-4">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11">
 
-                    <div>
-                        <h3>
-                            Название: <span class="fw-light">{{user.store.name}}</span>
-                        </h3>
-                    </div>
-                    <div>
-                        <h3>
-                            Город: <span class="fw-light">{{user.store.city}}</span>
-                        </h3>
-                    </div>
-                    <div>
-                        <h3>
-                            Адрес: <span class="fw-light">{{user.store.address}}</span>
-                        </h3>
-                    </div>
+                        <div>
+                            <h3>
+                                Название: <span class="fw-light">{{user.store.name}}</span>
+                            </h3>
+                        </div>
+                        <div>
+                            <h3>
+                                Город: <span class="fw-light">{{user.store.city}}</span>
+                            </h3>
+                        </div>
+                        <div>
+                            <h3>
+                                Адрес: <span class="fw-light">{{user.store.address}}</span>
+                            </h3>
+                        </div>
 
+                        <div>
+                            <h3>
+                                Рейтинг: <span class="fw-light">недоступно</span>
+                            </h3>
+                        </div>
 
+                        <div>
+                            <a href="{% url 'mainapp:store-update' %}" class="btn btn-primary">
+                                Редактировать магазин
+                            </a>
+                        </div>
+                    </div>
                 </div>
+
                 {% endif %}
 
 

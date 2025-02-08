@@ -75,12 +75,22 @@ class User(AbstractUser):
         verbose_name='признак активности',
 
     )
+    notif_tg = models.BooleanField(
+        verbose_name="Уведомления в Telegram",
+        blank=True,
+        default=False,
+    )
+    notif_email = models.BooleanField(
+        verbose_name="Уведомления по почте",
+        blank=True,
+        default=False,
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["phone", "username"]
 
     def __str__(self):
-        return f"{self.pk} | {self.username} | is_seller: {self.is_seller}"
+        return f"{self.pk} | {self.name} | is_seller: {self.is_seller}"
 
     class Meta:
         verbose_name = 'пользователь'

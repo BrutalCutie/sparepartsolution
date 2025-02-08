@@ -199,30 +199,6 @@ class Review(models.Model):
         verbose_name_plural = "отзывы"
 
 
-class NotifSetting(models.Model):
-    owner = models.ForeignKey(
-        "users.User",
-        on_delete=models.CASCADE,
-        verbose_name="владелец настройки",
-        related_name="notif_settings",
-    )
-    tg_notif = models.BooleanField(
-        verbose_name='признак отправки уведомления на telegram',
-        default=False,
-    )
-    email_notif = models.BooleanField(
-        verbose_name='признак отправки уведомления на email',
-        default=False,
-    )
-
-    def __str__(self):
-        return f"PK: {self.pk} | Owner: {self.owner}"
-
-    class Meta:
-        verbose_name = "настройка уведомлений"
-        verbose_name_plural = "настройки уведомлений"
-
-
 class Store(models.Model):
 
     name = models.CharField(

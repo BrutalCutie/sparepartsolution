@@ -5,6 +5,7 @@ from mainapp.models import Request, Chat, Message
 from mainapp.forms import MessageCreateForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from users.tasks import send_new_message_notification
 
 
 class MessageCreateView(CreateView):
@@ -29,6 +30,8 @@ class MessageCreateView(CreateView):
         message.from_user = user
         message.save()
         self.kwargs['redirect_to_chat_pk'] = chat.pk
+
+        send_new_message_notification.delay(user_id=message.to_user.id, message_id=message.id)
 
         return super().form_valid(form)
 
@@ -59,6 +62,9 @@ class ChatNewMessage(LoginRequiredMixin, CreateView):
         else:
             message.to_user = chat.request.owner
         message.save()
+
+        host = self.request.get_host()
+        send_new_message_notification.delay(user_id=message.to_user.id, message_id=message.id, host=host)
 
         return super().form_valid(form)
 

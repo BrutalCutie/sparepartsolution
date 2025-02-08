@@ -23,6 +23,7 @@ urlpatterns = [
     path("chat/detail/<int:pk>/new_message/", message.ChatNewMessage.as_view(), name='chat-new-message'),
 
     path("users/store/", store.StoreCreateView.as_view(), name='store-create'),
+    path("users/store/edit/", store.StoreUpdateView.as_view(), name='store-update'),
 
 
 ]

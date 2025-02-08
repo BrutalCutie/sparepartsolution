@@ -12,8 +12,12 @@ class UserRegistrationsForm(UserCreationForm):
             "name",
             "phone",
             "email",
+            "notif_email",
+            "tg_id",
+            "notif_tg",
             "password1",
             "password2",
+
         )
 
 
@@ -24,4 +28,8 @@ class UserUpdateForm(UserChangeForm):
             "name",
             "phone",
             "image",
+            "notif_email",
+            "tg_id",
+            "notif_tg",
+
         )
