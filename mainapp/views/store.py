@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 from mainapp.forms import StoreCreateForm
 from django.urls import reverse_lazy
 

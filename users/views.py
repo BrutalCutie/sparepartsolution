@@ -25,6 +25,15 @@ class UserCreateView(CreateView):
 class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'users/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.filter and user.filter.filter_word:
+            user_filters = [x for x in user.filter.filter_word.split("\r\n")]
+            context['user_filters'] = ", ".join(user_filters)
+
+        return context
+
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'users/register.html'
@@ -33,8 +42,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-    
+
     def form_valid(self, form):
+
         user = form.save()
 
         # Если пользователь удалил (галочка "Clear") фото профиля

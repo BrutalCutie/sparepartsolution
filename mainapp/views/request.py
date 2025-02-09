@@ -1,8 +1,10 @@
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, DeleteView, TemplateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from mainapp.models import Request, Chat
 from mainapp.forms import RequestCreateForm
+from users.tasks import send_new_request_notifications
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -15,9 +17,11 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         request = form.save()
         user = self.request.user
         request.owner = user
-        if request.city_not_matter:
+        if request.city_not_matter or not request.city:
             request.city = 'Все города'
         request.save()
+
+        send_new_request_notifications.delay(request_id=request.pk)
 
         return super().form_valid(form)
 

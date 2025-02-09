@@ -1,4 +1,5 @@
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, DeleteView, TemplateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from mainapp.models import Request, Chat, Message
@@ -62,9 +63,7 @@ class ChatNewMessage(LoginRequiredMixin, CreateView):
         else:
             message.to_user = chat.request.owner
         message.save()
-
-        host = self.request.get_host()
-        send_new_message_notification.delay(user_id=message.to_user.id, message_id=message.id, host=host)
+        send_new_message_notification.delay(user_id=message.to_user.id, message_id=message.id)
 
         return super().form_valid(form)
 

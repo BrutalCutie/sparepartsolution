@@ -161,10 +161,10 @@ class Chat(models.Model):
 
 
 class Filter(models.Model):
-    filter_word = models.CharField(
-        max_length=100,
-        verbose_name="фильтрующее слово",
-
+    filter_word = models.TextField(
+        verbose_name="фильтрующие слова",
+        null=True,
+        blank=True,
     )
 
     def __str__(self):

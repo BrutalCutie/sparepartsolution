@@ -1,5 +1,8 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from config.settings import MEDIA_URL
 
 from mainapp.models import Filter
 
@@ -41,7 +44,7 @@ class User(AbstractUser):
     )
     store = models.ForeignKey(
         'mainapp.Store',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name='магазин пользователя',
         null=True,
         blank=True,
@@ -51,7 +54,7 @@ class User(AbstractUser):
     filter = models.ForeignKey(
         Filter,
         verbose_name='фильтр уведомлений',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
 
@@ -67,7 +70,7 @@ class User(AbstractUser):
         upload_to='users/avatars/',
         null=True,
         blank=True,
-        default='/users/avatars/wo-avatar.png'
+        default='users/avatars/wo-avatar.png'
 
     )
     is_active = models.BooleanField(
@@ -91,6 +94,20 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.pk} | {self.name} | is_seller: {self.is_seller}"
+
+    def save(self, *args, **kwargs):
+        try:
+            old_obj = User.objects.get(pk=self.pk)
+        except User.DoesNotExist:
+            old_obj = None
+
+        super().save(*args, **kwargs)
+
+        if old_obj and old_obj.image and old_obj.image != self.image:
+            old_avatar_path = old_obj.image.path
+            default_avatar_name = MEDIA_URL + self.image.field.default
+            if os.path.isfile(old_avatar_path) and old_obj.image.url != default_avatar_name:
+                os.remove(old_avatar_path)
 
     class Meta:
         verbose_name = 'пользователь'

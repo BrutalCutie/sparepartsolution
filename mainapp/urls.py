@@ -1,4 +1,4 @@
-from mainapp.views import request, chat, message, store
+from mainapp.views import request, chat, message, store, filter_model
 
 from mainapp.apps import MainappConfig
 
@@ -24,6 +24,9 @@ urlpatterns = [
 
     path("users/store/", store.StoreCreateView.as_view(), name='store-create'),
     path("users/store/edit/", store.StoreUpdateView.as_view(), name='store-update'),
+
+
+    path("filters/", filter_model.FilterUpdateView.as_view(), name='my-filters'),
 
 
 ]

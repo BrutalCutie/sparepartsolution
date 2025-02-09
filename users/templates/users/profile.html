@@ -42,6 +42,7 @@
                         Статус: <span class="fw-light">{{user.is_seller|yesno:"Продавец,Пользователь"}}</span>
                     </h3>
                 </div>
+
                 <div>
                     <h3>
                         Уведомления: <span class="fw-light">{{user.notif_tg|yesno:"telegram,"}} {{user.notif_email|yesno:"email,"}}{% if not user.notif_tg and not user.notif_email %}Не выбраны{% endif %} #TODO инфо для получения уведомлений по тг</span>
@@ -57,7 +58,10 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-11">
                         <div>
-                            <h1 class="fw-light">Информация о магазине</h1>
+                            <h1 class="fw-light">
+                                Информация о магазине
+                                <a href="#" class="btn btn-danger">Удалить магазин</a>
+                            </h1>
                         </div>
                     </div>
 
@@ -86,6 +90,12 @@
                         <div>
                             <h3>
                                 Рейтинг: <span class="fw-light">недоступно</span>
+                            </h3>
+                        </div>
+
+                        <div>
+                            <h3>
+                                Фильтры: <span class="fw-light">{% if user_filters %}{{user_filters}}{% else %}Отсутствуют{% endif %}</span> <a href="{% url 'mainapp:my-filters' %}" class="btn btn-primary">Настроить</a>
                             </h3>
                         </div>
 

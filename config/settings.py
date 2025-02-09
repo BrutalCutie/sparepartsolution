@@ -99,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -144,14 +144,19 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# CELERY_BROKER_URL = os.getenv('BROKER_URL')
+# CELERY_RESULT_BACKEND = os.getenv('RESULT_BACKEND')
 
-# Настройки для локальной разработки без использования gunicorn
+# Настройки для локальной разработки без использования gunicorn и nginx
+
+# SERVER_IP = os.getenv('SERVER_IP')
+# BASE_HOST = f'http://{SERVER_IP}'
+
 DATABASES['default']['HOST'] = os.getenv('HOST')
 DATABASES['default']['NAME'] = os.getenv('NAME')
-
+BASE_HOST = 'http://127.0.0.1:8000'
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
-# CELERY_BROKER_URL = os.getenv('BROKER_URL')
-# CELERY_RESULT_BACKEND = os.getenv('RESULT_BACKEND')
+
 TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
