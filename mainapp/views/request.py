@@ -5,6 +5,7 @@ from django.urls import reverse_lazy, reverse
 from mainapp.models import Request, Chat
 from mainapp.forms import RequestCreateForm
 from users.tasks import send_new_request_notifications
+from django.core.cache import cache
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -20,8 +21,9 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         if request.city_not_matter or not request.city:
             request.city = 'Все города'
         request.save()
-
         send_new_request_notifications.delay(request_id=request.pk)
+        new_cache_set = Request.objects.filter(is_active=True)
+        cache.set('requests_set', new_cache_set, 60*5)
 
         return super().form_valid(form)
 
@@ -30,6 +32,16 @@ class RequestListView(ListView):
     model = Request
     template_name = "mainapp/requests/requests-list.html"
     context_object_name = "requests"
+
+    def get_queryset(self):
+
+        queryset = cache.get('requests_set')
+
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('requests_set', queryset, 60*5)
+
+        return queryset
 
 
 class MyRequestListView(RequestListView):
@@ -60,10 +72,14 @@ class RequestUpdateView(UpdateView):
     form_class = RequestCreateForm
 
     def get_success_url(self):
+        cache.delete('requests_set')
         return reverse("mainapp:request-detail", kwargs={"pk": self.object.pk})
 
 
 class RequestDeleteView(DeleteView):
     model = Request
     template_name = "mainapp/requests/request-delete-confirm.html"
-    success_url = reverse_lazy("mainapp:my-requests-list")
+
+    def get_success_url(self):
+        cache.delete('requests_set')
+        return reverse_lazy("mainapp:my-requests-list")

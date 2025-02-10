@@ -54,22 +54,15 @@
                     <a href="{% url 'mainapp:store-create' %}" class="btn btn-primary">Добавить свой магазин</a>
                 </div>
                 {% else %}
-                <div class="row mt-4">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-11">
-                        <div>
-                            <h1 class="fw-light">
-                                Информация о магазине
-                                <a href="#" class="btn btn-danger">Удалить магазин</a>
-                            </h1>
-                        </div>
-                    </div>
 
-
+                <div class="mt-5">
+                    <h1 class="fw-light">
+                        Информация о магазине
+                        <a href="{% url 'mainapp:store-delete' %}" class="btn btn-danger">Удалить магазин</a>
+                    </h1>
                 </div>
+
                 <div class="row mt-4">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-11">
 
                         <div>
                             <h3>
@@ -104,8 +97,6 @@
                                 Редактировать магазин
                             </a>
                         </div>
-                    </div>
-                </div>
 
                 {% endif %}
 
