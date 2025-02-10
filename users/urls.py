@@ -14,7 +14,6 @@ urlpatterns = [
     path("profile/", views.UserProfileView.as_view(), name="profile"),
     path("profile-update/", views.UserUpdateView.as_view(), name="profile-update"),
     path("logout/", LogoutView.as_view(next_page='mainapp:home'), name="logout"),
-    path("confirm-email/", TemplateView.as_view(template_name='users/confirm_email.html'), name="confirm-email"),
     path("success-email-confirmation/", TemplateView.as_view(template_name='users/success_email_confirmation.html'), name="success-email-confirmation"),
     path("success-email-confirmation/<str:token>/", views.email_confirm, name='success-email-confirmation-token'),
 

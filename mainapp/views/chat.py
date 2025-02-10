@@ -5,6 +5,8 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect
+
+from mainapp.mixins import IsChatMember
 from mainapp.models import Request, Chat, Message
 from mainapp.forms import ChatCreateForm
 from django.db.models import Q
@@ -29,7 +31,7 @@ class ChatListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ChatDetailView(LoginRequiredMixin, DetailView):
+class ChatDetailView(LoginRequiredMixin, IsChatMember, DetailView):
     model = Chat
     template_name = 'mainapp/chats/chat-detail.html'
 

@@ -11,11 +11,38 @@
         <a class="btn btn-warning" href="{% url 'mainapp:request-update' request_model.pk %}">🛠Изменить</a>
         <a class="btn btn-danger" href="{% url 'mainapp:request-delete' request_model.pk %}">🗑Удалить</a>
         {% else %}
-            {% if chat_exists %}
-                <a class="btn btn-primary" href="{% url 'mainapp:chat-detail' chat_exists.pk %}">🗨Перейти к чату💬</a>
-            {% else %}
-                <a class="btn btn-primary" href="{% url 'mainapp:new-message' request_model.pk %}">🗨Написать сообщение💬</a>
-            {% endif %}
+        {% if chat_exists %}
+        <a class="btn btn-primary" href="{% url 'mainapp:chat-detail' chat_exists.pk %}">🗨Перейти к чату💬</a>
+
+
+        {% elif not user.is_seller%}
+<!--        Тригер-кнопка для модального окна, если пользователь не продавец-->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#notASeller">
+            🗨Написать сообщение💬
+        </button>
+
+        <!-- Само модальное окно -->
+        <div class="modal fade" id="notASeller" tabindex="-1" aria-labelledby="notASellerLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="notASellerLabel">Вы не являетесь продавцом!</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Только продавцы, кто имеет свой магазин могут писать по заявке.<br>
+                        Добавить свой магазин можно из <strong>профиль</strong> -> <strong>добавить свой магазин</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Понятно</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <a class="btn btn-primary" href="{% url 'mainapp:new-message' request_model.pk %}">🗨Написать сообщение💬</a>
+        {% endif %}
 
         {% endif %}
 

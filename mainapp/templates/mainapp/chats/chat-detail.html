@@ -11,12 +11,12 @@
     <div class="row">
 
 <!--        список чатов-->
-        <div class="col-md-3">
+        <div class="col-md-4">
             {% include 'mainapp/chats/chats-div.html' %}
         </div>
 
 <!--        окно чата-->
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div>
                 <a class="nav-link" href="{% url 'mainapp:request-detail' request_model.pk %}">К заявке -></a>
             </div>

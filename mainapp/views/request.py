@@ -6,6 +6,7 @@ from mainapp.models import Request, Chat
 from mainapp.forms import RequestCreateForm
 from users.tasks import send_new_request_notifications
 from django.core.cache import cache
+from mainapp.mixins import IsModelOwnerMixin
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -34,7 +35,6 @@ class RequestListView(ListView):
     context_object_name = "requests"
 
     def get_queryset(self):
-
         queryset = cache.get('requests_set')
 
         if not queryset:
@@ -52,7 +52,7 @@ class MyRequestListView(RequestListView):
         return my_requests
 
 
-class RequestDetailView(DetailView):
+class RequestDetailView(LoginRequiredMixin, DetailView):
     model = Request
     template_name = "mainapp/requests/request-detail.html"
     context_object_name = 'request_model'
@@ -66,7 +66,7 @@ class RequestDetailView(DetailView):
         return context
 
 
-class RequestUpdateView(UpdateView):
+class RequestUpdateView(LoginRequiredMixin, IsModelOwnerMixin, UpdateView):
     template_name = "mainapp/requests/request-create.html"
     model = Request
     form_class = RequestCreateForm
@@ -76,7 +76,7 @@ class RequestUpdateView(UpdateView):
         return reverse("mainapp:request-detail", kwargs={"pk": self.object.pk})
 
 
-class RequestDeleteView(DeleteView):
+class RequestDeleteView(LoginRequiredMixin, IsModelOwnerMixin, DeleteView):
     model = Request
     template_name = "mainapp/requests/request-delete-confirm.html"
 

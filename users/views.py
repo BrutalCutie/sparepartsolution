@@ -11,15 +11,14 @@ from users.services import UserService
 class UserCreateView(CreateView):
     template_name = 'users/register.html'
     form_class = UserRegistrationsForm
-    success_url = reverse_lazy('users:confirm-email')
+    # Не возвращаем success_url а рендерим страницу
 
     def form_valid(self, form):
         user = form.save()
         user.is_active = False
         host = self.request.get_host()
         UserService.send_confirm_mail_message(user.pk, host)
-
-        return super().form_valid(form)
+        return render(self.request, 'users/confirm_email.html')
 
 
 class UserProfileView(LoginRequiredMixin, TemplateView):

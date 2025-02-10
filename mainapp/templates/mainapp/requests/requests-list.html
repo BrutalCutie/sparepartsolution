@@ -22,37 +22,44 @@
 
         {% for request_model in requests %}
         <div class="container">
-            <a class="nav-link" href="{% url 'mainapp:request-detail' request_model.pk%}">
-                <div class="card mb-1">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
 
-                    <div class="row g-0">
-                        <div class="col-md-3 col-lg-2">
-                            <img src="{% if request_model.photo %}{{request_model.photo.url}}{% else %}/static/imgs/wo-image.bmp{% endif %}"
-                                 class="img-fluid rounded-start" alt="..." style="min-width:10rem; max-height:10rem;">
-                        </div>
-                        <div class="col-md-8 col-lg-9">
+                    <a class="nav-link" href="{% url 'mainapp:request-detail' request_model.pk%}">
+                        <div class="card mb-1">
 
-                            <div class="card-body">
+                            <div class="row g-0">
+                                <div class="col-md-3 col-lg-2">
+                                    <img src="{% if request_model.photo %}{{request_model.photo.url}}{% else %}/static/imgs/wo-image.bmp{% endif %}"
+                                         class="img-fluid rounded-start" alt="..."
+                                         style="min-width:10rem; max-height:10rem;">
+                                </div>
+                                <div class="col-md-8 col-lg-9">
 
-                                <h5 class="card-title">{{request_model.car}} {{request_model.model}}</h5>
-                                <h5 class="card-title">{{request_model.year}}</h5>
+                                    <div class="card-body">
 
-                                <p class="card-text">{{request_model.text|truncatechars:150}}</p>
+                                        <h5 class="card-title">{{request_model.car}} {{request_model.model}}</h5>
+                                        <h5 class="card-title">{{request_model.year}}</h5>
+
+                                        <p class="card-text">{{request_model.text|truncatechars:150}}</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-1 mt-2">
+                                    <p class="card-text"><small
+                                            class="text-body-secondary">{{request_model.city}}</small></p>
+                                    <p><small>{{request_model.created_at|time:"H:i" }}</small></p>
+                                </div>
+
                             </div>
-
                         </div>
-                        <div class="col-md-1 mt-2">
-                            <p class="card-text"><small class="text-body-secondary">{{request_model.city}}</small></p>
-                            <p><small>{{request_model.created_at|time:"H:i" }}</small></p>
-                        </div>
-
-                    </div>
+                    </a>
                 </div>
-            </a>
-        </div>
+                <div class="col-md-1"></div>
 
-        {% endfor %}
-    </div>
+                {% endfor %}
+            </div>
 
 </main>
 

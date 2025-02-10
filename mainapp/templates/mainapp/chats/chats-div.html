@@ -6,15 +6,15 @@
             <div class="row">
                 <div class="col-md-3">
                     {% if chat.created_by == user %}
-                    <img src="{{chat.request.photo.url}}" alt="request-image" width="50rem" class="rounded-circle mt-2">
-                    {% else %}<img src="{{chat.created_by.image.url}}" alt="profile-image" width="50rem" class="rounded-circle mt-2">
+                    <img src="{{chat.request.photo.url}}" alt="request-image" width="60rem" class="rounded-circle mt-2">
+                    {% else %}<img src="{{chat.created_by.image.url}}" alt="profile-image" width="60rem" class="rounded-circle mt-2">
                     {% endif %}
 
                 </div>
                 <div class="col-md-9">
                     <a class="nav-link" href="{% url 'mainapp:chat-detail' chat.pk %}">
 
-                <h3>
+                <h3 style="font-size:24px;">
 <!--                    признак непрочитанного письма-->
                     {% if chat.pk in unreaded %}
                     ✉

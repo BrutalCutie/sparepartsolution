@@ -7,9 +7,10 @@ from mainapp.forms import MessageCreateForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from users.tasks import send_new_message_notification
+from mainapp.mixins import IsSellerMixin
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, IsSellerMixin, CreateView):
     template_name = "mainapp/messages/message-create.html"
     form_class = MessageCreateForm
 
@@ -46,7 +47,7 @@ class MessageCreateView(CreateView):
         return reverse('mainapp:chat-detail', kwargs={'pk': self.kwargs.get('redirect_to_chat_pk')})
 
 
-class ChatNewMessage(LoginRequiredMixin, CreateView):
+class ChatNewMessage(LoginRequiredMixin, IsSellerMixin, CreateView):
     template_name = "mainapp/messages/new-chat-message.html"
     form_class = MessageCreateForm
     
