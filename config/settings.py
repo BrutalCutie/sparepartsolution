@@ -153,12 +153,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CELERY_BROKER_URL = os.getenv('BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('RESULT_BACKEND')
 
-SERVER_IP = os.getenv('SERVER_IP')
-BASE_HOST = f'http://{SERVER_IP}'
+# SERVER_IP = os.getenv('SERVER_IP')
+# BASE_HOST = f'http://{SERVER_IP}'
 
 # Настройки для локальной разработки без использования gunicorn и nginx
 
-# BASE_HOST = "http://127.0.0.1:8000"
+BASE_HOST = "http://127.0.0.1/"
 
 # DATABASES["default"]["HOST"] = os.getenv("HOST")
 # DATABASES["default"]["NAME"] = os.getenv("NAME")
