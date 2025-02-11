@@ -45,8 +45,38 @@
 
                 <div>
                     <h3>
-                        Уведомления: <span class="fw-light">{{user.notif_tg|yesno:"telegram,"}} {{user.notif_email|yesno:"email,"}}{% if not user.notif_tg and not user.notif_email %}Не выбраны{% endif %} #TODO инфо для получения уведомлений по тг</span>
+                        Уведомления
+
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#notificationModalLabel">
+                            ❕
+                        </button>
+                        : <span class="fw-light">{{user.notif_tg|yesno:"telegram,"}} {{user.notif_email|yesno:"email,"}}{% if not user.notif_tg and not user.notif_email %}Не выбраны{% endif %}</span>
                     </h3>
+
+
+                    <!-- модальное окно информации по уведомлениям -->
+                    <div class="modal fade" id="notificationModalLabel" tabindex="-1"
+                         aria-labelledby="notificationModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Информация по уведомлениям</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <strong>Для уведомлений по Telegram:</strong><br>
+                                    Для уведомлений используется бот.<br>
+                                    Познакомиться с ботом по <a
+                                        href="https://t.me/Lookersonbibot?start=me">ссылке</a><br>
+                                    Теперь вы будете получать уведобления о новых сообщениях или о новых заявках, но
+                                    основе или отсутствии фильтров
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {% if not user.is_seller %}
@@ -64,51 +94,52 @@
 
                 <div class="row mt-4">
 
-                        <div>
-                            <h3>
-                                Название: <span class="fw-light">{{user.store.name}}</span>
-                            </h3>
-                        </div>
-                        <div>
-                            <h3>
-                                Город: <span class="fw-light">{{user.store.city}}</span>
-                            </h3>
-                        </div>
-                        <div>
-                            <h3>
-                                Адрес: <span class="fw-light">{{user.store.address}}</span>
-                            </h3>
-                        </div>
+                    <div>
+                        <h3>
+                            Название: <span class="fw-light">{{user.store.name}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3>
+                            Город: <span class="fw-light">{{user.store.city}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3>
+                            Адрес: <span class="fw-light">{{user.store.address}}</span>
+                        </h3>
+                    </div>
 
-                        <div>
-                            <h3>
-                                Рейтинг: <span class="fw-light">недоступно</span>
-                            </h3>
-                        </div>
+                    <div>
+                        <h3>
+                            Рейтинг: <span class="fw-light">недоступно</span>
+                        </h3>
+                    </div>
 
-                        <div>
-                            <h3>
-                                Фильтры: <span class="fw-light">{% if user_filters %}{{user_filters}}{% else %}Отсутствуют{% endif %}</span> <a href="{% url 'mainapp:my-filters' %}" class="btn btn-primary">Настроить</a>
-                            </h3>
-                        </div>
+                    <div>
+                        <h3>
+                            Фильтры: <span class="fw-light">{% if user_filters %}{{user_filters}}{% else %}Отсутствуют{% endif %}</span>
+                            <a href="{% url 'mainapp:my-filters' %}" class="btn btn-primary">Настроить</a>
+                        </h3>
+                    </div>
 
-                        <div>
-                            <a href="{% url 'mainapp:store-update' %}" class="btn btn-primary">
-                                Редактировать магазин
-                            </a>
-                        </div>
+                    <div>
+                        <a href="{% url 'mainapp:store-update' %}" class="btn btn-primary">
+                            Редактировать магазин
+                        </a>
+                    </div>
 
-                {% endif %}
+                    {% endif %}
+
+
+                </div>
 
 
             </div>
-
-
         </div>
+
+
     </div>
 
 
-</div>
-
-
-{% endblock %}
+    {% endblock %}
