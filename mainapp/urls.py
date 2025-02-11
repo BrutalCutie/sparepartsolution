@@ -26,7 +26,7 @@ urlpatterns = [
     path("users/store/edit/", store.StoreUpdateView.as_view(), name='store-update'),
     path("users/store/delete/", store.StoreDeleteView.as_view(), name='store-delete'),
 
-    path("filters/", filter_model.FilterUpdateView.as_view(), name='my-filters'),
+    path("users/filters/", filter_model.FilterUpdateView.as_view(), name='my-filters'),
 
 
 ]
