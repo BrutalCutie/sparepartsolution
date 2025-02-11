@@ -110,7 +110,7 @@ class Request(models.Model):
     )
     is_active = models.BooleanField(
         verbose_name="признак активной заявки",
-        default=False,
+        default=True,
 
     )
     created_at = models.DateTimeField(

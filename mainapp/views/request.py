@@ -2,11 +2,13 @@ from django.views.generic import ListView, DetailView, DeleteView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
+from django.db.models import Q
 from mainapp.models import Request, Chat
 from mainapp.forms import RequestCreateForm
 from users.tasks import send_new_request_notifications
 from django.core.cache import cache
 from mainapp.mixins import IsModelOwnerMixin
+from django.shortcuts import render
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
@@ -24,7 +26,7 @@ class RequestCreateView(LoginRequiredMixin, CreateView):
         request.save()
         send_new_request_notifications.delay(request_id=request.pk)
         new_cache_set = Request.objects.filter(is_active=True)
-        cache.set('requests_set', new_cache_set, 60*5)
+        cache.set('requests_set', new_cache_set, 60 * 5)
 
         return super().form_valid(form)
 
@@ -39,7 +41,18 @@ class RequestListView(ListView):
 
         if not queryset:
             queryset = super().get_queryset()
-            cache.set('requests_set', queryset, 60*5)
+            cache.set('requests_set', queryset, 60 * 5)
+
+        search_field_data = self.request.GET.get("request_search_field")
+
+        if search_field_data:
+            return queryset.filter(
+                Q(car__icontains=search_field_data.lower()) |
+                Q(model__icontains=search_field_data) |
+                Q(city__icontains=search_field_data) |
+                Q(text__icontains=search_field_data),
+                is_active=True,
+            )
 
         return queryset
 
@@ -83,3 +96,18 @@ class RequestDeleteView(LoginRequiredMixin, IsModelOwnerMixin, DeleteView):
     def get_success_url(self):
         cache.delete('requests_set')
         return reverse_lazy("mainapp:my-requests-list")
+
+
+def search_requests(request):
+    search_field_data = request.GET.get('request_search_field')
+    if not search_field_data:
+        request_queryset = Request.objects.filter(is_active=True)
+    else:
+        request_queryset = Request.objects.filter(
+            Q(car__icontains=search_field_data.lower()) |
+            Q(model__icontains=search_field_data) |
+            Q(city__icontains=search_field_data),
+            is_active=True,
+        )
+
+    return render(request, 'mainapp/requests/requests-list.html', {'requests': request_queryset})

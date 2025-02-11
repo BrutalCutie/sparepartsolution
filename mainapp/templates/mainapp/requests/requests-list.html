@@ -10,11 +10,15 @@
 
 <main style="min-height: 60vh;">
     <div class="container">
-        <h1 class="mt-5">
+        <h1 class="mt-5 text-center">
             {% if 'my_requests' in request.path %}Ваши заявки
             {% else %}Активные заявки
             {% endif %}
             <a href="{% url 'mainapp:request-create' %}" class="btn btn-primary">Создать</a>
+            <form method="get" class="mt-5">
+                <input type="text" name="request_search_field" placeholder="поиск" style="font-size:1.5rem;">
+                <button class="btn btn-primary" type="submit">Поиск</button>
+            </form>
         </h1>
     </div>
 
@@ -60,6 +64,8 @@
 
                 {% endfor %}
             </div>
+        </div>
+    </div>
 
 </main>
 
