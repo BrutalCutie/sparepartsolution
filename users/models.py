@@ -1,51 +1,47 @@
 import os
 
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from config.settings import MEDIA_URL
+from django.db import models
 
+from config.settings import MEDIA_URL
 from mainapp.models import Filter
 
 
 class User(AbstractUser):
     name = models.CharField(
         max_length=200,
-        verbose_name='имя',
-
+        verbose_name="имя",
     )
     tg_id = models.CharField(
         max_length=20,
-        verbose_name='ID телеграма',
+        verbose_name="ID телеграма",
         null=True,
         blank=True,
-
     )
     username = models.CharField(
         max_length=100,
-        verbose_name='псевдоним',
+        verbose_name="псевдоним",
         null=True,
         blank=True,
     )
     phone = models.CharField(
         max_length=20,
         verbose_name="номер телефона",
-
     )
     email = models.EmailField(
         verbose_name="почта",
         unique=True,
-
     )
     is_seller = models.BooleanField(
-        verbose_name='признак продавца',
+        verbose_name="признак продавца",
         default=False,
         null=True,
         blank=True,
     )
     store = models.ForeignKey(
-        'mainapp.Store',
+        "mainapp.Store",
         on_delete=models.SET_NULL,
-        verbose_name='магазин пользователя',
+        verbose_name="магазин пользователя",
         null=True,
         blank=True,
         default=None,
@@ -53,30 +49,22 @@ class User(AbstractUser):
 
     filter = models.ForeignKey(
         Filter,
-        verbose_name='фильтр уведомлений',
+        verbose_name="фильтр уведомлений",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-
     )
     rating = models.FloatField(
-        verbose_name='рейтинг продавца',
+        verbose_name="рейтинг продавца",
         null=True,
         blank=True,
-
     )
     image = models.ImageField(
-        verbose_name="аватар",
-        upload_to='users/avatars/',
-        null=True,
-        blank=True,
-        default='users/avatars/wo-avatar.png'
-
+        verbose_name="аватар", upload_to="users/avatars/", null=True, blank=True, default="users/avatars/wo-avatar.png"
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name='признак активности',
-
+        verbose_name="признак активности",
     )
     notif_tg = models.BooleanField(
         verbose_name="Уведомления в Telegram",
@@ -110,15 +98,12 @@ class User(AbstractUser):
                 os.remove(old_avatar_path)
 
     class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
 
 
 class RegisterConfirmToken(models.Model):
     user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='register_token',
-        verbose_name='токен регистрации'
+        User, on_delete=models.CASCADE, related_name="register_token", verbose_name="токен регистрации"
     )
     token = models.CharField(max_length=40)

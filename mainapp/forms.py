@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from mainapp.models import Request, Chat, Message, Store, Filter
+from mainapp.models import Chat, Filter, Message, Request, Store
 
 
 class RequestCreateForm(ModelForm):
@@ -15,7 +15,6 @@ class RequestCreateForm(ModelForm):
             "city_not_matter",
             "text",
             "photo",
-
         )
 
 
@@ -28,7 +27,6 @@ class ChatCreateForm(ModelForm):
             "request",
             "is_active",
             "created_by",
-
         )
 
 
@@ -60,6 +58,4 @@ class FilterUpdateForm(ModelForm):
     class Meta:
         model = Filter
 
-        fields = (
-            "filter_word",
-        )
+        fields = ("filter_word",)

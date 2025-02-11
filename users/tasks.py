@@ -1,11 +1,10 @@
 import requests
 from celery import shared_task
-
 from django.core.mail import send_mail
 from django.db.models import Q
 
-from config.settings import EMAIL_HOST_USER, TG_BOT_TOKEN, SERVICE_NAME, BASE_HOST
-from mainapp.models import Message, Request, Filter
+from config.settings import BASE_HOST, EMAIL_HOST_USER, SERVICE_NAME, TG_BOT_TOKEN
+from mainapp.models import Message, Request
 from users.models import User
 
 
@@ -34,13 +33,18 @@ def send_new_message_telegram_notification(message_id: int):
     message = Message.objects.get(pk=message_id)
     store_or_user = message.from_user.store.name if message.from_user.is_seller else message.from_user.name
     start_message_text = f"Вам пришло новое сообщение от <b>{store_or_user}</b>\n\n"
-    end_message_text = f'\n\nПерейти в чат - {BASE_HOST}/chat/detail/{message.chat.pk}/\n\nКоманда {SERVICE_NAME}'
+    end_message_text = f"\n\nПерейти в чат - {BASE_HOST}/chat/detail/{message.chat.pk}/\n\nКоманда {SERVICE_NAME}"
 
     message_text = start_message_text + message.message_text + end_message_text
     message_to = message.to_user
     receiver_tg_id = message_to.tg_id
 
-    url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage?chat_id={receiver_tg_id}&text={message_text}&parse_mode=HTML"
+    url = (
+        f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage?"
+        f"chat_id={receiver_tg_id}&"
+        f"text={message_text}&"
+        f"parse_mode=HTML"
+    )
     requests.get(url)
 
 
@@ -50,7 +54,7 @@ def send_new_message_email_notification(message_id: int):
     message = Message.objects.get(pk=message_id)
     store_or_user = message.from_user.store.name if message.from_user.is_seller else message.from_user.name
     start_message_text = f"Вам пришло одно новое сообщение от {store_or_user}\n\n"
-    end_message_text = f'\n\nПерейти в чат - {BASE_HOST}/chat/detail/{message.chat.pk}/\n\nКоманда {SERVICE_NAME}'
+    end_message_text = f"\n\nПерейти в чат - {BASE_HOST}/chat/detail/{message.chat.pk}/\n\nКоманда {SERVICE_NAME}"
     message_text = start_message_text + message.message_text + end_message_text
     send_mail(
         subject=subject,
@@ -67,10 +71,10 @@ def send_new_request_email_notification(request_id: int, user_id: int):
 
     user_to_notify = User.objects.get(pk=user_id)
 
-    start_message_text = (f"Поступила новая заявка\n\n"
-                          f"<b>{request.car} {request.car} {request.year}</b>\n\n"
-                          f"{request.text}")
-    end_message_text = f'\n\nК заявке - {BASE_HOST}/request/detail/{request.pk}/\n\nКоманда {SERVICE_NAME}'
+    start_message_text = (
+        f"Поступила новая заявка\n\n" f"<b>{request.car} {request.car} {request.year}</b>\n\n" f"{request.text}"
+    )
+    end_message_text = f"\n\nК заявке - {BASE_HOST}/request/detail/{request.pk}/\n\nКоманда {SERVICE_NAME}"
     message_text = start_message_text + request.text + end_message_text
     send_mail(
         subject=subject,
@@ -86,21 +90,21 @@ def send_new_request_telegram_notification(request_id: int, user_id: int):
     user_to_notify = User.objects.get(pk=user_id)
 
     start_message_text = f"Поступила новая заявка\n\n{request.car} {request.car} {request.year}\n\n{request.text}"
-    end_message_text = f'\n\nК заявке - {BASE_HOST}/request/detail/{request.pk}/'
+    end_message_text = f"\n\nК заявке - {BASE_HOST}/request/detail/{request.pk}/"
 
     message_text = start_message_text + request.text + end_message_text
     receiver_tg_id = user_to_notify.tg_id
 
-    url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage?chat_id={receiver_tg_id}&text={message_text}&parse_mode=HTML"
+    url = (f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage?"
+           f"chat_id={receiver_tg_id}&"
+           f"text={message_text}&"
+           f"parse_mode=HTML")
     requests.get(url)
 
 
 @shared_task
 def send_new_request_notifications(request_id: int):
-    users = User.objects.filter(
-        Q(notif_tg=True) | Q(notif_email=True),
-        is_seller=True,
-        is_active=True)
+    users = User.objects.filter(Q(notif_tg=True) | Q(notif_email=True), is_seller=True, is_active=True)
 
     request = Request.objects.get(pk=request_id)
     request_text = f"{request.car} {request.model} {request.year} {request.city}. {request.text}".lower()
@@ -108,8 +112,8 @@ def send_new_request_notifications(request_id: int):
     for user in users:
         is_need_notify = True
 
-        if user.filter and user.filter.filter_word != '':
-            filter_words_parts = user.filter.filter_word.split('\r\n')
+        if user.filter and user.filter.filter_word != "":
+            filter_words_parts = user.filter.filter_word.split("\r\n")
             filter_words = [x.lower() for x in filter_words_parts]
             is_need_notify = any([x in request_text for x in filter_words])
 

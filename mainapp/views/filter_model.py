@@ -1,14 +1,14 @@
-from mainapp.models import Filter
-from users.models import User
-from django.views.generic.edit import CreateView, UpdateView
-from mainapp.forms import FilterUpdateForm
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
+
+from mainapp.forms import FilterUpdateForm
+from mainapp.models import Filter
 
 
 class FilterUpdateView(LoginRequiredMixin, UpdateView):
     model = Filter
-    template_name = 'mainapp/filters/filter-create.html'
+    template_name = "mainapp/filters/filter-create.html"
     form_class = FilterUpdateForm
 
     success_url = reverse_lazy("users:profile")
@@ -19,7 +19,7 @@ class FilterUpdateView(LoginRequiredMixin, UpdateView):
 
         if not filter_model:
             filter_model = Filter.objects.create(
-                filter_word='',
+                filter_word="",
             )
             user.filter = filter_model
             user.save()

@@ -11,7 +11,7 @@ class IsSellerMixin(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
     def handle_no_permission(self):
-        return render(self.request, 'mainapp/access_denied.html')
+        return render(self.request, "mainapp/access_denied.html")
 
 
 class IsModelOwnerMixin(AccessMixin):
@@ -23,7 +23,7 @@ class IsModelOwnerMixin(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
     def handle_no_permission(self):
-        return render(self.request, 'mainapp/access_denied.html')
+        return render(self.request, "mainapp/access_denied.html")
 
 
 class IsChatMember(AccessMixin):
@@ -37,4 +37,4 @@ class IsChatMember(AccessMixin):
         return super().dispatch(request, *args, **kwargs)
 
     def handle_no_permission(self):
-        return render(self.request, 'mainapp/access_denied.html')
+        return render(self.request, "mainapp/access_denied.html")

@@ -1,32 +1,39 @@
-from django.views.generic import ListView, DetailView, DeleteView, TemplateView
-from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy, reverse
-from django.db.models import Q
-from mainapp.models import Request, Chat
-from mainapp.forms import RequestCreateForm
-from users.tasks import send_new_request_notifications
 from django.core.cache import cache
+from django.db.models import Q
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DeleteView, DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView
+from rest_framework import generics
+
+from mainapp.forms import RequestCreateForm
 from mainapp.mixins import IsModelOwnerMixin
-from django.shortcuts import render
+from mainapp.models import Chat, Request
+from mainapp.serializers import RequestSerializer
+from users.tasks import send_new_request_notifications
+
+
+class RequestListAPIView(generics.ListAPIView):
+    serializer_class = RequestSerializer
+    queryset = Request.objects.filter(is_active=True).order_by("-created_at")
 
 
 class RequestCreateView(LoginRequiredMixin, CreateView):
     template_name = "mainapp/requests/request-create.html"
     form_class = RequestCreateForm
 
-    success_url = reverse_lazy('mainapp:my-requests-list')
+    success_url = reverse_lazy("mainapp:my-requests-list")
 
     def form_valid(self, form):
         request = form.save()
         user = self.request.user
         request.owner = user
         if request.city_not_matter or not request.city:
-            request.city = 'Все города'
+            request.city = "Все города"
         request.save()
         send_new_request_notifications.delay(request_id=request.pk)
         new_cache_set = Request.objects.filter(is_active=True)
-        cache.set('requests_set', new_cache_set, 60 * 5)
+        cache.set("requests_set", new_cache_set, 60 * 5)
 
         return super().form_valid(form)
 
@@ -37,20 +44,20 @@ class RequestListView(ListView):
     context_object_name = "requests"
 
     def get_queryset(self):
-        queryset = cache.get('requests_set')
+        queryset = cache.get("requests_set")
 
         if not queryset:
             queryset = super().get_queryset()
-            cache.set('requests_set', queryset, 60 * 5)
+            cache.set("requests_set", queryset.order_by("-created_at"), 60 * 5)
 
         search_field_data = self.request.GET.get("request_search_field")
 
         if search_field_data:
             return queryset.filter(
-                Q(car__icontains=search_field_data.lower()) |
-                Q(model__icontains=search_field_data) |
-                Q(city__icontains=search_field_data) |
-                Q(text__icontains=search_field_data),
+                Q(car__icontains=search_field_data.lower())
+                | Q(model__icontains=search_field_data)
+                | Q(city__icontains=search_field_data)
+                | Q(text__icontains=search_field_data),
                 is_active=True,
             )
 
@@ -68,13 +75,13 @@ class MyRequestListView(RequestListView):
 class RequestDetailView(LoginRequiredMixin, DetailView):
     model = Request
     template_name = "mainapp/requests/request-detail.html"
-    context_object_name = 'request_model'
+    context_object_name = "request_model"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
 
-        context['chat_exists'] = Chat.objects.filter(created_by=user, request=self.object.pk).first()
+        context["chat_exists"] = Chat.objects.filter(created_by=user, request=self.object.pk).first()
 
         return context
 
@@ -85,7 +92,7 @@ class RequestUpdateView(LoginRequiredMixin, IsModelOwnerMixin, UpdateView):
     form_class = RequestCreateForm
 
     def get_success_url(self):
-        cache.delete('requests_set')
+        cache.delete("requests_set")
         return reverse("mainapp:request-detail", kwargs={"pk": self.object.pk})
 
 
@@ -94,20 +101,5 @@ class RequestDeleteView(LoginRequiredMixin, IsModelOwnerMixin, DeleteView):
     template_name = "mainapp/requests/request-delete-confirm.html"
 
     def get_success_url(self):
-        cache.delete('requests_set')
+        cache.delete("requests_set")
         return reverse_lazy("mainapp:my-requests-list")
-
-
-def search_requests(request):
-    search_field_data = request.GET.get('request_search_field')
-    if not search_field_data:
-        request_queryset = Request.objects.filter(is_active=True)
-    else:
-        request_queryset = Request.objects.filter(
-            Q(car__icontains=search_field_data.lower()) |
-            Q(model__icontains=search_field_data) |
-            Q(city__icontains=search_field_data),
-            is_active=True,
-        )
-
-    return render(request, 'mainapp/requests/requests-list.html', {'requests': request_queryset})

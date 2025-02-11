@@ -12,3 +12,26 @@ python = "^3.12"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | dist
+    | migrations
+  )/
+  | foo.py
+
+)
+'''
+
+[tool.isort]
+# максимальная длина строки
+line_length = 119

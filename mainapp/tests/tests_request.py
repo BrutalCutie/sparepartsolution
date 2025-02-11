@@ -1,40 +1,38 @@
 from django.test import TestCase
 
-from mainapp.models import Request, Chat, Message, Filter, Store
+from mainapp.models import Request
 from users.models import User
 
 
 class RequestTestCase(TestCase):
     user = None
     test_data = {
-        'car': 'Ford',
-        'model': 'Focus',
-        'year': 2008,
-        'text': 'test',
+        "car": "Ford",
+        "model": "Focus",
+        "year": 2008,
+        "text": "test",
     }
     test_data_list = [
         {
-            'car': 'Ford',
-            'model': 'Focus',
-            'year': 2008,
-            'text': 'test',
+            "car": "Ford",
+            "model": "Focus",
+            "year": 2008,
+            "text": "test",
         },
         {
-            'car': 'Audi',
-            'model': 'A4',
-            'year': 2015,
-            'text': 'test',
+            "car": "Audi",
+            "model": "A4",
+            "year": 2015,
+            "text": "test",
         },
-
     ]
 
     # создаём пользователя и насильно его авторизуем
     def setUp(self):
         self.user = User.objects.create(
-            name='user1',
-            email='user1@mail.com',
-            phone='123',
-
+            name="user1",
+            email="user1@mail.com",
+            phone="123",
         )
         self.client.force_login(user=self.user)
 
@@ -44,17 +42,10 @@ class RequestTestCase(TestCase):
         :return:
         """
 
-        self.client.post(
-            path='/request/create/',
-            data=self.test_data
-        )
+        self.client.post(path="/request/create/", data=self.test_data)
 
-        self.assertTrue(
-            Request.objects.filter().exists()
-        )
-        self.assertEqual(
-            Request.objects.filter().first().owner, self.user
-        )
+        self.assertTrue(Request.objects.filter().exists())
+        self.assertEqual(Request.objects.filter().first().owner, self.user)
 
     def test_request_update(self):
         """
@@ -62,24 +53,19 @@ class RequestTestCase(TestCase):
         :return:
         """
 
-        self.client.post(
-            path='/request/create/',
-            data=self.test_data
-        )
+        self.client.post(path="/request/create/", data=self.test_data)
         request = Request.objects.filter().first()
         self.client.post(
-            path=f'/request/update/{request.pk}/',
+            path=f"/request/update/{request.pk}/",
             data={
-                'car': 'otherCar',
-                'model': 'otherFocus',
-                'year': 2000,
-                'text': 'othertext',
-            }
+                "car": "otherCar",
+                "model": "otherFocus",
+                "year": 2000,
+                "text": "othertext",
+            },
         )
 
-        self.assertEqual(
-            Request.objects.filter().first().car, "otherCar"
-        )
+        self.assertEqual(Request.objects.filter().first().car, "otherCar")
 
     def test_request_list(self):
         """
@@ -88,59 +74,44 @@ class RequestTestCase(TestCase):
         """
 
         for data in self.test_data_list:
-            self.client.post(
-                path='/request/create/',
-                data=data
-            )
+            self.client.post(path="/request/create/", data=data)
 
-        r = self.client.get(
-            path='/request/list/'
-
-        )
-        self.assertEqual(
-            len(r.context_data.get("requests")), 2
-        )
+        r = self.client.get(path="/request/list/")
+        self.assertEqual(len(r.context_data.get("requests")), 2)
 
     def test_request_delete(self):
         """
         удаление заявки
         :return:
         """
-        self.client.post(
-            path='/request/create/',
-            data=self.test_data
-        )
+        self.client.post(path="/request/create/", data=self.test_data)
 
-        created_request = Request.objects.get(car='Ford')
+        created_request = Request.objects.get(car="Ford")
 
-        self.client.delete(
-            path=f'/request/delete/{created_request.pk}/'
-        )
+        self.client.delete(path=f"/request/delete/{created_request.pk}/")
 
-        self.assertFalse(
-            Request.objects.filter()
-        )
+        self.assertFalse(Request.objects.filter())
 
 
 class RequestPermissionTestCase(TestCase):
     user = None
     test_data = {
-        'car': 'Ford',
-        'model': 'Focus',
-        'year': 2008,
-        'text': 'test',
+        "car": "Ford",
+        "model": "Focus",
+        "year": 2008,
+        "text": "test",
     }
 
     def setUp(self):
         self.user = User.objects.create(
-            name='user1',
-            email='user1@mail.com',
-            phone='123',
+            name="user1",
+            email="user1@mail.com",
+            phone="123",
         )
         self.user2 = User.objects.create(
-            name='user2',
-            email='user2@mail.com',
-            phone='123',
+            name="user2",
+            email="user2@mail.com",
+            phone="123",
         )
 
         self.client.force_login(user=self.user)
@@ -157,14 +128,12 @@ class RequestPermissionTestCase(TestCase):
 
         self.client.force_login(user=self.user2)
 
-        request = Request.objects.get(car='Ford')
+        request = Request.objects.get(car="Ford")
         self.assertTrue(request)
 
-        self.client.delete(
-            path=f"/request/delete/{request.pk}/"
-        )
+        self.client.delete(path=f"/request/delete/{request.pk}/")
 
-        request = Request.objects.get(car='Ford')
+        request = Request.objects.get(car="Ford")
         self.assertTrue(request)
 
     def test_request_update_by_other_user(self):
@@ -179,20 +148,16 @@ class RequestPermissionTestCase(TestCase):
 
         self.client.force_login(user=self.user2)
 
-        request = Request.objects.get(car='Ford')
+        request = Request.objects.get(car="Ford")
 
         self.client.post(
             path=f"/request/update/{request.pk}/",
             data={
-                'car': 'otherFord',
-                'model': 'otherFocus',
-                'year': 2000,
-                'text': 'otherTest',
-            }
+                "car": "otherFord",
+                "model": "otherFocus",
+                "year": 2000,
+                "text": "otherTest",
+            },
         )
 
-        self.assertTrue(
-            Request.objects.get(car='Ford')
-        )
-
-
+        self.assertTrue(Request.objects.get(car="Ford"))

@@ -1,7 +1,6 @@
-from django.utils.translation import ngettext
-
 from django.contrib.auth.password_validation import MinimumLengthValidator
 from django.core.exceptions import ValidationError
+from django.utils.translation import ngettext
 
 
 class OwnPassValidator(MinimumLengthValidator):

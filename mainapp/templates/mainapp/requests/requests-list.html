@@ -46,14 +46,16 @@
                                         <h5 class="card-title">{{request_model.car}} {{request_model.model}}</h5>
                                         <h5 class="card-title">{{request_model.year}}</h5>
 
-                                        <p class="card-text">{{request_model.text|truncatechars:150}}</p>
+                                        <p class="card-text">{{request_model.text|truncatechars:100}}</p>
                                     </div>
 
                                 </div>
                                 <div class="col-md-1 mt-2">
                                     <p class="card-text"><small
                                             class="text-body-secondary">{{request_model.city}}</small></p>
-                                    <p><small>{{request_model.created_at|time:"H:i" }}</small></p>
+                                    <p style="font-size:0.8rem;">
+                                        <small>{{request_model.created_at|date:"d.m" }} {{request_model.created_at|time:"H:i" }}</small>
+                                    </p>
                                 </div>
 
                             </div>

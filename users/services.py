@@ -1,7 +1,7 @@
 import secrets
 
 from config.settings import SERVICE_NAME
-from users.models import User, RegisterConfirmToken
+from users.models import RegisterConfirmToken, User
 from users.tasks import send_email_confirmation_url
 
 
@@ -14,12 +14,11 @@ class UserService:
         RegisterConfirmToken.objects.create(
             user=user,
             token=token,
-
         )
 
         data = {
-            'user_email': user.email,
-            'url': f"http://{host}/users/success-email-confirmation/{token}",
+            "user_email": user.email,
+            "url": f"http://{host}/users/success-email-confirmation/{token}",
             "subject": f"Подтверждение почты {SERVICE_NAME}",
         }
 
