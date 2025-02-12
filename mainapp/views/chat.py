@@ -10,6 +10,10 @@ from mainapp.serializers import ChatSerializer
 
 
 class ChatListApiView(generics.ListAPIView):
+    """
+    Представление получения списка чатов пользователя по API.
+    Возвращает только списки чатов, что пользователь является участником.
+    """
     serializer_class = ChatSerializer
     permission_classes = [IsAuthenticated]
     queryset = Chat.objects.all()
@@ -23,25 +27,35 @@ class ChatListApiView(generics.ListAPIView):
 
 
 class ChatListView(LoginRequiredMixin, ListView):
+    """
+    Представление списка чатов.
+    Возвращает чаты, в которых пользователь является участником.
+    Так-же представление выявляет, есть ли непрочитанные сообщения.
+    """
     model = Chat
     template_name = "mainapp/chats/chat-list.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context["unreaded"] = list()
+        context["unreaded"] = list()  # список для чатов, где есть непрочитанные сообщения
         user = self.request.user
         chats = Chat.objects.filter(Q(request__owner=user) | Q(created_by=user))
+
         for chat in chats:
             unreaded_messages = Message.objects.filter(chat__pk=chat.pk, to_user=user, readed=False)
-            if unreaded_messages:
+
+            if unreaded_messages:  # если в чате есть непрочитанные сообщения, добавляем в список
                 context["unreaded"].append(chat.pk)
 
+        # сортируем чаты по последнему обновлению
         context["chats"] = chats.order_by("-last_updated")
-
         return context
 
 
 class ChatDetailView(LoginRequiredMixin, IsChatMember, DetailView):
+    """
+    Представление чата и получение сообщений, относящихся к чату.
+    """
     model = Chat
     template_name = "mainapp/chats/chat-detail.html"
 
