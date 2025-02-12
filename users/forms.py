@@ -4,6 +4,9 @@ from users.models import User
 
 
 class UserRegistrationsForm(UserCreationForm):
+    """
+    Форма создания пользователя
+    """
     class Meta:
         model = User
         fields = (
@@ -19,6 +22,9 @@ class UserRegistrationsForm(UserCreationForm):
 
 
 class UserUpdateForm(UserChangeForm):
+    """
+    Форма редактирования пользователя
+    """
     class Meta:
         model = User
         fields = (

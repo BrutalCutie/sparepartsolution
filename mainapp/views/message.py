@@ -14,6 +14,11 @@ from users.tasks import send_new_message_notification
 
 
 class MessageListAPIView(generics.ListAPIView):
+    """
+    Представление получения списка сообщений по указанному чату.
+    Получить сообщения можно только по чатам, где пользователь является
+    или создателем чата, или создателем заявки.
+    """
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated, IsChatMember]
     queryset = Message.objects.all()
@@ -26,6 +31,10 @@ class MessageListAPIView(generics.ListAPIView):
 
 
 class MessageCreateView(LoginRequiredMixin, IsSellerMixin, CreateView):
+    """
+    Представление отвечающее за создание нового сообщения из заявки.
+    Создавать такое сообщение можно только если пользователь является продавцом.
+    """
     template_name = "mainapp/messages/message-create.html"
     form_class = MessageCreateForm
 
@@ -63,6 +72,9 @@ class MessageCreateView(LoginRequiredMixin, IsSellerMixin, CreateView):
 
 
 class ChatNewMessage(LoginRequiredMixin, IsSellerMixin, CreateView):
+    """
+    Представление отвечающее за создание нового сообщения из чата.
+    """
     template_name = "mainapp/messages/new-chat-message.html"
     form_class = MessageCreateForm
 

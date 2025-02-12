@@ -10,6 +10,9 @@ from users.models import User
 
 @shared_task
 def send_email_confirmation_url(data: dict):
+    """
+    Функция отвечающая за высылку письма на подтверждения почты
+    """
     send_mail(
         subject=data.get("subject"),
         message=data.get("message_text"),
@@ -20,6 +23,9 @@ def send_email_confirmation_url(data: dict):
 
 @shared_task
 def send_new_message_notification(user_id: int, message_id: int):
+    """
+    Функция на проверку необходимости уведомлять пользователя о новом сообщении по почте или телеграму
+    """
     user = User.objects.get(pk=user_id)
     if user.notif_tg:
         send_new_message_telegram_notification.delay(message_id=message_id)
@@ -104,6 +110,10 @@ def send_new_request_telegram_notification(request_id: int, user_id: int):
 
 @shared_task
 def send_new_request_notifications(request_id: int):
+    """
+    Функция на проверку необходимости уведомлять пользователя о новой заявке по почте или телеграму
+    на основе имеющегося фильтра или его отсутствии, если пользователь - продавец
+    """
     users = User.objects.filter(Q(notif_tg=True) | Q(notif_email=True), is_seller=True, is_active=True)
 
     request = Request.objects.get(pk=request_id)

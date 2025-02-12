@@ -6,7 +6,9 @@ from users.tasks import send_email_confirmation_url
 
 
 class UserService:
-
+    """
+    Сервисные функции пользователя
+    """
     @staticmethod
     def send_confirm_mail_message(user_id, host):
         token = secrets.token_hex(16)

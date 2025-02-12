@@ -9,6 +9,9 @@ from users.services import UserService
 
 
 class UserCreateView(CreateView):
+    """
+    Представление отвечающее за создание пользователя
+    """
     template_name = "users/register.html"
     form_class = UserRegistrationsForm
     # Не возвращаем success_url а рендерим страницу
@@ -22,6 +25,9 @@ class UserCreateView(CreateView):
 
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
+    """
+    Представление отвечающее за просмотр профиля пользователя
+    """
     template_name = "users/profile.html"
 
     def get_context_data(self, **kwargs):
@@ -35,6 +41,9 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Представление отвечающее за редактирования данных пользователя
+    """
     template_name = "users/register.html"
     form_class = UserUpdateForm
     success_url = reverse_lazy("users:profile")
@@ -57,6 +66,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 
 def email_confirm(request, token):
+    """
+    Функция для подтверждения почты пользователя, при переходе по ссылке
+    """
     register_token = RegisterConfirmToken.objects.filter(token=token)
     if not register_token.exists() and request.method == "GET":
         return render(request, "mainapp/wrong_register_token.html")

@@ -8,6 +8,9 @@ from mainapp.models import Filter
 
 
 class User(AbstractUser):
+    """
+    Модель пользователя
+    """
     name = models.CharField(
         max_length=200,
         verbose_name="имя",
@@ -103,6 +106,9 @@ class User(AbstractUser):
 
 
 class RegisterConfirmToken(models.Model):
+    """
+    Модель токена на подтверждение почты
+    """
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="register_token", verbose_name="токен регистрации"
     )

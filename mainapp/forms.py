@@ -4,7 +4,9 @@ from mainapp.models import Chat, Filter, Message, Request, Store
 
 
 class RequestCreateForm(ModelForm):
-
+    """
+    Форма создания заявки
+    """
     class Meta:
         model = Request
         fields = (
@@ -19,6 +21,9 @@ class RequestCreateForm(ModelForm):
 
 
 class ChatCreateForm(ModelForm):
+    """
+    Форма создания чата
+    """
 
     class Meta:
         model = Chat
@@ -31,6 +36,9 @@ class ChatCreateForm(ModelForm):
 
 
 class MessageCreateForm(ModelForm):
+    """
+    Форма создания сообщения
+    """
 
     class Meta:
         model = Message
@@ -42,7 +50,9 @@ class MessageCreateForm(ModelForm):
 
 
 class StoreCreateForm(ModelForm):
-
+    """
+    Форма создания и редактирования магазина
+    """
     class Meta:
         model = Store
 
@@ -54,7 +64,9 @@ class StoreCreateForm(ModelForm):
 
 
 class FilterUpdateForm(ModelForm):
-
+    """
+    Форма создания фильтра уведомления
+    """
     class Meta:
         model = Filter
 

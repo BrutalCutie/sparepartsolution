@@ -2,6 +2,9 @@ from django.db import models
 
 
 class Message(models.Model):
+    """
+    Модель сообщения
+    """
     chat = models.ForeignKey(
         "Chat",
         verbose_name="чат к которому привязано сообщение",
@@ -52,7 +55,9 @@ class Message(models.Model):
 
 
 class Request(models.Model):
-
+    """
+    Модель заявки
+    """
     owner = models.ForeignKey(
         "users.User",
         verbose_name="Создатель заявки",
@@ -114,6 +119,9 @@ class Request(models.Model):
 
 
 class Chat(models.Model):
+    """
+    Модель чата
+    """
     request = models.ForeignKey(Request, verbose_name="заявка", on_delete=models.CASCADE, related_name="chats")
     is_active = models.BooleanField(
         verbose_name="признак активности",
@@ -138,6 +146,9 @@ class Chat(models.Model):
 
 
 class Filter(models.Model):
+    """
+    Модель чата
+    """
     filter_word = models.TextField(
         verbose_name="фильтрующие слова",
         null=True,
@@ -153,6 +164,9 @@ class Filter(models.Model):
 
 
 class Review(models.Model):
+    """
+    Модель отзыва
+    """
     seller = models.ForeignKey("users.User", on_delete=models.CASCADE, verbose_name="продавец", related_name="reviews")
     rating = models.FloatField(verbose_name="оценка")
     review_text = models.TextField(verbose_name="текст отзыва")
@@ -169,7 +183,9 @@ class Review(models.Model):
 
 
 class Store(models.Model):
-
+    """
+    Модель магазина
+    """
     name = models.CharField(
         verbose_name="название магазина",
         max_length=100,

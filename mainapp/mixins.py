@@ -3,7 +3,9 @@ from django.shortcuts import render
 
 
 class IsSellerMixin(AccessMixin):
-
+    """
+    Миксин, для проверки, что пользователь является продавцом
+    """
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_seller:
             return self.handle_no_permission()
@@ -15,7 +17,9 @@ class IsSellerMixin(AccessMixin):
 
 
 class IsModelOwnerMixin(AccessMixin):
-
+    """
+    Миксин, для проверки, что пользователь является владельцем модели
+    """
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().owner != self.request.user:
             return self.handle_no_permission()
@@ -27,7 +31,9 @@ class IsModelOwnerMixin(AccessMixin):
 
 
 class IsChatMember(AccessMixin):
-
+    """
+    Миксин, для проверки, что пользователь является участником чата
+    """
     def dispatch(self, request, *args, **kwargs):
         chat = self.get_object()
 

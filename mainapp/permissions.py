@@ -4,6 +4,9 @@ from mainapp.models import Chat
 
 
 class IsChatMember(BasePermission):
+    """
+    Ограничение, что пользователь является участником чата
+    """
     def has_permission(self, request, view):
         user = request.user
 

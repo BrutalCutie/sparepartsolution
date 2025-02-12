@@ -6,6 +6,10 @@ from mainapp.models import Store
 
 
 class StoreCreateView(CreateView):
+    """
+    Представление создания магазина
+    """
+
     model = Store
     form_class = StoreCreateForm
     template_name = "mainapp/stores/store-create.html"
@@ -24,6 +28,9 @@ class StoreCreateView(CreateView):
 
 
 class StoreUpdateView(UpdateView):
+    """
+    Представление редактирование магазина
+    """
     model = Store
     form_class = StoreCreateForm
     template_name = "mainapp/stores/store-create.html"
@@ -34,6 +41,9 @@ class StoreUpdateView(UpdateView):
 
 
 class StoreDeleteView(DeleteView):
+    """
+    Представление удаления магазина
+    """
     model = Store
     template_name = "mainapp/stores/store-delete-confirm.html"
     success_url = reverse_lazy("users:profile")
