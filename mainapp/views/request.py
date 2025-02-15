@@ -127,6 +127,9 @@ class RequestDeleteView(LoginRequiredMixin, IsModelOwnerMixin, DeleteView):
     model = Request
     template_name = "mainapp/requests/request-delete-confirm.html"
 
-    def get_success_url(self):
+    def form_valid(self, form):
         cache.delete("requests_set")
+        return super().form_valid(form)
+
+    def get_success_url(self):
         return reverse_lazy("mainapp:my-requests-list")
