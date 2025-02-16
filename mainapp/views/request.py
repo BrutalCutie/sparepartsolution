@@ -69,10 +69,8 @@ class RequestListView(ListView):
 
         if search_field_data:
             return queryset.filter(
-                Q(car__icontains=search_field_data.lower())
-                | Q(model__icontains=search_field_data)
-                | Q(city__icontains=search_field_data)
-                | Q(text__icontains=search_field_data),
+                Q(car__icontains=search_field_data.lower()) | Q(model__icontains=search_field_data) | Q(
+                    city__icontains=search_field_data) | Q(text__icontains=search_field_data),
                 is_active=True,
             )
 

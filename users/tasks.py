@@ -78,7 +78,7 @@ def send_new_request_email_notification(request_id: int, user_id: int):
     user_to_notify = User.objects.get(pk=user_id)
 
     start_message_text = (
-        f"Поступила новая заявка\n\n" f"<b>{request.car} {request.car} {request.year}</b>\n\n" f"{request.text}"
+        f"Поступила новая заявка\n\n" f"{request.car} {request.model} {request.year}\n\n"
     )
     end_message_text = f"\n\nК заявке - {BASE_HOST}/request/detail/{request.pk}/\n\nКоманда {SERVICE_NAME}"
     message_text = start_message_text + request.text + end_message_text

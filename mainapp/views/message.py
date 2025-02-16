@@ -71,7 +71,7 @@ class MessageCreateView(LoginRequiredMixin, IsSellerMixin, CreateView):
         return reverse("mainapp:chat-detail", kwargs={"pk": self.kwargs.get("redirect_to_chat_pk")})
 
 
-class ChatNewMessage(LoginRequiredMixin, IsSellerMixin, CreateView):
+class ChatNewMessage(LoginRequiredMixin, IsChatMember, CreateView):
     """
     Представление отвечающее за создание нового сообщения из чата.
     """
